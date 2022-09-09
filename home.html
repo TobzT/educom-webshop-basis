@@ -9,15 +9,38 @@
 
         header {
             text-align: center;
-        }
-        .header {
-            font-size:calc(48px + 1.5vw);
-            
-             /* font-size: 100px; */
+            background-color:rgb(55, 114, 202);
         }
 
-        .list li {
+        footer {
+            text-align: right;
+            background-color: black;
+            color: white;
+            min-height: 48px;
+        }
+        
+        .header {
+            color:white;
+            
+        }
+
+        .divh {
+            max-width: 30%;
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        .body {
+            font-size: 12px;
+            color: rgb(100, 96, 96);
+        }
+
+        li {
             list-style-type: none;
+            
+        }
+        .list ul {
+            display: inline;
         }
 
         a:link {
@@ -36,12 +59,12 @@
         <header>
             <h1 class="header">Title</h1>
             <ul class="list">
-                <li><a href="home.html" class="header">HOME</a></li>
-                <li><a href="about.html"class="header">ABOUT</a></li>
-                <li><a href="contact.html"class="header">CONTACT</a></li>
+                <div class="divh"><li><a href="home.html" class="header">HOME</a></li></div>
+                <div class="divh"><li><a href="about.html"class="header">ABOUT</a></li></div>
+                <div class="divh"><li><a href="contact.html"class="header">CONTACT</a></li></div>
             </ul>
         </header>
-        <p>
+        <p class="body">
             Welcome to the website, dear traveler. <br>
             Here we will have some fun while also learning a thing or two. <br>
             See you around traveler!
