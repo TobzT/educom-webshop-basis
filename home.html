@@ -1,29 +1,56 @@
 <!DOCTYPE html>
 <head>
     <style>
-        body {
+        .container {
             width: 800px;
+            margin-right: auto;
+            margin-left: auto;
+        }
 
+        header {
+            text-align: center;
+        }
+        .header {
+            font-size:calc(48px + 1.5vw);
+            
+             /* font-size: 100px; */
+        }
+
+        .list li {
+            list-style-type: none;
+        }
+
+        a:link {
+            text-decoration: none;
+            color: black;
+        }
+
+        a:visited {
+            text-decoration: none;
+            color:black;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Title</h1>
-        <ul>
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="about.html">ABOUT</a></li>
-            <li><a href="contact.html">CONTACT</a></li>
-        </ul>
-    </header>
-    <p>
-        Welcome to the website, dear traveler. <br>
-        Here we will have some fun while also learning a thing or two. <br>
-        See you around traveler!
-    </p>
-    <footer>
+    <div class="container">
+        <header>
+            <h1 class="header">Title</h1>
+            <ul class="list">
+                <li><a href="home.html" class="header">HOME</a></li>
+                <li><a href="about.html"class="header">ABOUT</a></li>
+                <li><a href="contact.html"class="header">CONTACT</a></li>
+            </ul>
+        </header>
+        <p>
+            Welcome to the website, dear traveler. <br>
+            Here we will have some fun while also learning a thing or two. <br>
+            See you around traveler!
+        </p>
+        <footer>
          	&#169;
-        <p>2022</p>
-        <p>Tobias The</p>
-    </footer>
+            <p>2022</p>
+            <p>Tobias The</p>
+        </footer>
+    </div>
+    
 </body>
