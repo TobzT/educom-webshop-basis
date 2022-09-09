@@ -6,32 +6,83 @@
                 background-color:rgb(86, 228, 228);
             }
             .container {
-                height: 100%;
-                width: 100%;
-                text-align: center;
-                
+                text-align: center; 
+                align-content: center;
+                /* background-color: red; */
+                padding: 15px;
             }
+
             .test {
                 display: inline-block;
                 height: 100%;
-                color: red;
-                background-color: blue;
-                border: 2px solid red;
+                background-color: rgb(109, 109, 204);
+                border: 2px solid rgb(82, 23, 23);
+                padding: 10px;
             }
+
+            .center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            table, td, th {
+                border: 1px solid black;
+                font-size: larger;
+            }
+
+            
             
         </style>
     </head>
     <body>
         <div class="container">
+            <h1>
+                <i>Hello World! </i>
+            </h1>
+
+            <h2>
+                <a href="https://youtube.com" target="_blank">
+                    <div class="test">
+                        Test
+                    </div>
+                </a>
+            </h2>
+            
             <p>
-                Hello World! 
+                <a href="https://twitter.com" target="_blank">
+                    <img src="doge.jpg" alt=":)" title=":)" width="auto" height="auto">
+                </a>
             </p>
 
-            <a href="https://youtube.com" target="_blank">
-                <div class="test">
-                    Test
-                </div>
-            </a>
+            <p>
+                <table class="center">
+                    <tr>
+                        <th> Foo </th>
+                        <th> Bar </th>
+                    </tr>
+                    <tr>
+                        <td> the </td>
+                        <td> quick </td>
+                    </tr>
+                    <tr>
+                        <td> brown </td>
+                        <td> fox </td>
+                    </tr>
+                </table>
+            </p>
+
+            <p>Do you like PHP?</p>
+            <form>
+                <input type="radio" id="yes" name="yn" value="yes">
+                <label for="yes">Yes</label><br>
+                <input type="radio" id="no" name="yn" value="no">
+                <label for="no">No</label><br>
+
+                <button>Submit</button>
+                
+            </form>
+            
+            
         </div>
     </body>
 </html>
