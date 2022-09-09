@@ -2,27 +2,36 @@
 <html>
     <head>
         <style>
-            div {
+            body {
+                background-color:rgb(86, 228, 228);
+            }
+            .container {
                 height: 100%;
-                width: 50%;
+                width: 100%;
+                text-align: center;
+                
+            }
+            .test {
+                display: inline-block;
+                height: 100%;
                 color: red;
                 background-color: blue;
                 border: 2px solid red;
             }
+            
         </style>
     </head>
     <body>
-        <p>
-            Hello World! 
-        </p>
+        <div class="container">
+            <p>
+                Hello World! 
+            </p>
 
-        <p>
-            <div>
-                Test
-            </div>
-        </p>
-        
-        
-        
+            <a href="https://youtube.com" target="_blank">
+                <div class="test">
+                    Test
+                </div>
+            </a>
+        </div>
     </body>
 </html>
