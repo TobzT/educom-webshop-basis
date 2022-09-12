@@ -92,7 +92,7 @@
         <?php 
             if($_SERVER["REQUEST_METHOD"] == "GET") {
                 echo(
-                    '<form class="body">
+                    '<form class="body" method="post" action="contact.php">
                         <label for="gender">Aanhef:</label>
 
                         <select name="gender" id="gender">
@@ -113,10 +113,10 @@
                         <p>Communicatievoorkeur:</p>
                         
                         
-                        <input type="radio" id="vtlf" name="v">
+                        <input type="radio" id="vtlf" name="v" value="tlf">
                         <label for="vtlf">Telefoon</label><br>
                         
-                        <input type="radio" id="vemail" name="v">
+                        <input type="radio" id="vemail" name="v" value="email">
                         <label for="vemail">E-mail</label><br><br>
 
                         <textarea class="input" name="Text1" cols="40" rows="10"></textarea>
@@ -126,6 +126,33 @@
                     </form>'
                 );
             };
+
+            if($_SERVER["REQUEST_METHOD"] == "POST") {
+                $gender = test_inputs($_POST["gender"]);
+                $name = test_inputs($_POST["name"]);
+                $email = test_inputs($_POST["email"]);
+                $tlf = test_inputs($_POST["tlf"]);
+                $v = test_inputs($_POST["v"]);
+                $text = test_inputs($_POST["Text1"]);
+
+                echo(
+                    "
+                        <p> gender: $gender </p>
+                        <p> name: $name </p>
+                        <p> email: $email </p>
+                        <p> tlf: $tlf </p>
+                        <p> voorkeur: $v </p>
+                        <p> message: $text </p>
+                    "
+                );
+            }
+
+            function test_inputs($data) {
+                $data = trim($data);
+                $data = stripslashes($data);
+                $data = htmlspecialchars($data);
+                return $data;
+              }
         ?>
         
         <footer>
