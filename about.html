@@ -1,35 +1,99 @@
 <!DOCTYPE html>
 <head>
+    <style>
+        .container {
+            display: block;
+            width: 800px;
+            height: 100%;
+            margin-right: auto;
+            margin-left: auto;
+        }
 
+        header {
+            text-align: center;
+            background-color:rgb(55, 114, 202);
+            min-height: 48px;
+            padding: 1px;
+        }
+
+        footer {
+            margin-bottom: 0%;
+            text-align: right;
+            background-color: black;
+            color: white;
+            min-height: 48px;
+            font-size: 10px;
+        }
+        
+        .header {
+            color:white;
+            
+        }
+
+        .divh {
+            display: inline-block;
+            max-width: 30%;
+            border: 1px solid white;
+            padding: 5px;
+            color: white;
+        }
+
+        .body {
+            font-size: 12px;
+            color: rgb(100, 96, 96);
+        }
+
+        
+        .list ul {
+            display: inline;
+            
+        }
+        .menu {
+            color: white;
+            font-size: large;
+            list-style-type: none;
+        }
+
+        .menu:link {
+            text-decoration: none;
+        }
+
+        .menu:visited {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Title</h1>
-        <ul>
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="about.html">ABOUT</a></li>
-            <li><a href="contact.html">CONTACT</a></li>
-        </ul>
-    </header>
+    <div class="container">
+        <header>
+            <h1 class="header">Title</h1>
+            <ul class="list">
+                <div class="divh"><li class="menu"><a href="home.html" class="menu">HOME</a></li></div>
+                <div class="divh"><li class="menu"><a href="about.html"class="menu">ABOUT</a></li></div>
+                <div class="divh"><li class="menu"><a href="contact.html"class="menu">CONTACT</a></li></div>
+            </ul>
+        </header>
+        <div class="body">
+            <p>My name is Tobias, and I am building this website right now. <br>
+                I am planning on making this a bigger project, but everyone has to start somewhere.
+            </p>
+        
 
-    <p>My name is Tobias, and I am building this website right now. <br>
-        I am planning on making this a bigger project, but everyone has to start somewhere.
-    </p>
+            <p>
+                My hobbies consist of:<br>
+                <ul>
+                    <li>Music production</li>
+                    <li>Video games (mainly first person shooters)</li>
+                    <li>Sports (tennis, table tennis, basket ball)</li>
+                </ul>
+            </p>
 
-    <p>
-        My hobbies consist of:<br>
-        <ul>
-            <li>Music production</li>
-            <li>Video games (mainly first person shooters)</li>
-            <li>Sports (tennis, table tennis, basket ball)</li>
-        </ul>
-    </p>
-
-    <p>If you have any questions, go over to the contact page. You can find information there.</p>
-
+            <p>If you have any questions, go over to the contact page. You can find information there.</p>
+        </div>
     <footer>
         &#169;
-   <p>2022</p>
-   <p>Tobias The</p>
-</footer>
+        <p>2022</p>
+        <p>Tobias The</p>
+    </footer>
+    </div>
 </body>
