@@ -3,6 +3,7 @@
     <style>
         .container {
             width: 800px;
+            height: 100%;
             margin-right: auto;
             margin-left: auto;
         }
@@ -10,13 +11,16 @@
         header {
             text-align: center;
             background-color:rgb(55, 114, 202);
+            min-height: 48px;
         }
 
         footer {
+            margin-bottom: 0%;
             text-align: right;
             background-color: black;
             color: white;
             min-height: 48px;
+            font-size: 10px;
         }
         
         .header {
@@ -25,9 +29,11 @@
         }
 
         .divh {
+            display: inline-block;
             max-width: 30%;
-            border: 1px solid black;
+            border: 1px solid white;
             padding: 5px;
+            color: white;
         }
 
         .body {
