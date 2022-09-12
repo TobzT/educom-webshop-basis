@@ -227,7 +227,7 @@
                         <label for="vemail">E-mail</label><br><br>';
                     }
 
-                }
+                    
                     echo(
                         '<form class="body" method="post" action="contact.php">
                             <label for="gender">Aanhef:</label>
@@ -252,6 +252,7 @@
                         </form>'
                     );
                 }
+            }
                 
                 
             
