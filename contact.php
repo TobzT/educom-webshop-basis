@@ -216,7 +216,7 @@
                         
                         <input type="radio" id="vemail" name="pref" value="email">
                         <label for="vemail">E-mail</label><br><br>';
-                    } else {
+                    } elseif($pref == "email") {
                         $radio = '<p>Communicatievoorkeur: <h3 class="error">'. $prefErr .'</h3></p> 
                             
                             
@@ -224,6 +224,15 @@
                         <label for="vtlf">Telefoon</label><br>
                         
                         <input type="radio" id="vemail" name="pref" value="email" checked>
+                        <label for="vemail">E-mail</label><br><br>';
+                    } else {
+                        $radio = '<p>Communicatievoorkeur: <h3 class="error">'. $prefErr .'</h3></p>
+                            
+                            
+                        <input type="radio" id="vtlf" name="pref" value="tlf">
+                        <label for="vtlf">Telefoon</label><br>
+                        
+                        <input type="radio" id="vemail" name="pref" value="email">
                         <label for="vemail">E-mail</label><br><br>';
                     }
 
