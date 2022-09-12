@@ -1,0 +1,79 @@
+<mxfile host="65bd71144e">
+    <diagram id="sRckla2KPKiwMlTJUJ2y" name="Page-1">
+        <mxGraphModel dx="1968" dy="812" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="GET&amp;nbsp;" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="80" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="POST" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="80" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="SHOW LEGE FORM" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="200" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="NAAM?" style="verticalLabelPosition=middle;verticalAlign=top;html=1;shape=mxgraph.basic.acute_triangle;dx=0.5;direction=west;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="200" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="YES&lt;br&gt;" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="200" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="NO" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;direction=north;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="380" y="200" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="EMAIL?" style="verticalLabelPosition=middle;verticalAlign=top;html=1;shape=mxgraph.basic.acute_triangle;dx=0.5;direction=west;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="330" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="YES&lt;br&gt;" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="330" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="NO" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;direction=north;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="330" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="SHOW FORM WITH ERROR" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="380" y="330" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="SHOW FORM WITH ERROR" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="460" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="TELEFOON?" style="verticalLabelPosition=middle;verticalAlign=top;html=1;shape=mxgraph.basic.acute_triangle;dx=0.5;direction=west;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="460" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="YES&lt;br&gt;" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="460" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="NO" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;direction=north;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="460" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="SHOW FORM WITH ERROR" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="590" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="COMMUNICATIEVOORKEUR?" style="verticalLabelPosition=middle;verticalAlign=top;html=1;shape=mxgraph.basic.acute_triangle;dx=0.5;direction=west;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="-20" y="590" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="YES&lt;br&gt;" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="-20" y="590" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="NO" style="verticalLabelPosition=middle;verticalAlign=bottom;html=1;shape=mxgraph.basic.orthogonal_triangle;direction=north;labelPosition=center;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="590" width="100" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="SHOW FORM MET ERROR" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="720" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="INGEVULDE WAARDEN&lt;br&gt;(GEEN FORM)" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-120" y="720" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="SHOW FORM MET ERROR" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="590" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="SHOW FORM MET ERROR" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="460" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="SHOW FORM MET ERROR" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="380" y="330" width="200" height="130" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
