@@ -63,6 +63,10 @@
         .menu:visited {
             text-decoration: none;
         }
+
+        .input {
+            width: 400px;
+        }
     </style>
 </head>
 <body>
@@ -85,13 +89,13 @@
             </select><br><br>
 
             <label for="name">Naam:</label>
-            <input type="text" id="name" name="name"><br><br>
+            <input class="input" type="text" id="name" name="name"><br><br>
 
             <label for="email">E-mail adres:</label>
-            <input type="text" id="email" name="email"><br><br>
+            <input class="input" type="text" id="email" name="email"><br><br>
 
             <label for="tlf">Telefoonnummer:</label>
-            <input type="number" id="tlf" name="tlf"><br><br>
+            <input class="input" type="number" id="tlf" name="tlf"><br><br>
 
             <p>Communicatievoorkeur:</p>
             
@@ -102,7 +106,7 @@
             <input type="radio" id="vemail" name="v">
             <label for="vemail">E-mail</label><br><br>
 
-            <textarea name="Text1" cols="40" rows="10"></textarea>
+            <textarea class="input" name="Text1" cols="40" rows="10"></textarea>
 
             <br><br>
             <button>Submit</button>
