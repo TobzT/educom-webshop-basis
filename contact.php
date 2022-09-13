@@ -52,12 +52,13 @@
                 $text = test_inputs($_POST["Text1"]);
             }
 
-            if($valid == true){
-                if($gender == "male"){
-                    $pronoun = "dhr";
-                    
-                } elseif($gender == "female") {
-                    $pronoun = "mvr";
+            if($valid == true) {
+                switch($gender) {
+                    case "male":
+                        $pronoun = "dhr";
+                        break;
+                    case "female":
+                        $pronoun = "mvr";
                 }
                 
                 switch($pref) {
