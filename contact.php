@@ -131,7 +131,7 @@
         
         <footer>
             &#169;
-            <p>2022</p>
+            <p><?php echo date("Y") ?></p>
             <p>Tobias The</p>
         </footer>
     </div>
