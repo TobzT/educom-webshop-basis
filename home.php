@@ -7,9 +7,9 @@
         <header>
             <h1 class="header">Title</h1>
             <ul class="list">
-                <div class="divh"><li class="menu"><a href="home.html" class="menu">HOME</a></li></div>
-                <div class="divh"><li class="menu"><a href="about.html"class="menu">ABOUT</a></li></div>
-                <div class="divh"><li class="menu"><a href="contact.php"class="menu">CONTACT</a></li></div>
+                <div class="divh"><li class="menu"><a href="index.php?page=home" class="menu">HOME</a></li></div>
+                <div class="divh"><li class="menu"><a href="index.php?page=about"class="menu">ABOUT</a></li></div>
+                <div class="divh"><li class="menu"><a href="index.php?page=contact"class="menu">CONTACT</a></li></div>
             </ul>
         </header>
         <p class="body">
