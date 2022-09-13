@@ -66,8 +66,6 @@ function showHeader() {
         <div class="divh"><li class="menu"><a href="index.php?page=about"class="menu">ABOUT</a></li></div>
         <div class="divh"><li class="menu"><a href="index.php?page=contact"class="menu">CONTACT</a></li></div>
     </ul>
-        
-        
     </header>
    ');
 }
