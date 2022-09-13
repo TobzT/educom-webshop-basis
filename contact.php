@@ -54,20 +54,30 @@
 
             if($valid == true){
                 if($gender == "male"){
-                    $pronoun = "Dhr";
+                    $pronoun = "dhr";
+                    
                 } elseif($gender == "female") {
-                    $pronoun = "Mvr";
+                    $pronoun = "mvr";
+                }
+                
+                switch($pref) {
+                    case "email":
+                        $pref = "e-mail";
+                        break;
+                    case "tlf":
+                        $pref = "telefoon";
                 }
                 echo(
-                    "
-                        Dankjewel $pronoun $name! <br> <br>
+                    '<p class="body">
+                        Dankjewel ' . $pronoun . " " . $name . '! <br> <br>
 
-                        Jouw e-mail adres is $email. <br>
-                        Jouw telefoonnummer is $tlf. <br>
-                        Jouw voorkeur is $pref. <br>
+                        Jouw e-mail adres is ' . $email . '. <br>
+                        Jouw telefoonnummer is ' . $tlf . '. <br>
+                        Jouw voorkeur is ' . $pref . '. <br> <br>
                         
-                        $text
-                    "
+                        ' . $text . '
+                    </p>
+                    '
                 );
             } else {
                 
