@@ -106,71 +106,33 @@
                     );
                 } else {
                     
-                    if($gender == "male") {
-                        $dropdown = '<select name="gender" id="gender">
-                            <option value="male" selected>Dhr</option>
-                            <option value="female">Mvr</option>
-                            <option value="other">Anders</option>
-                        </select><br><br>';
-                    } elseif($gender == "female") {
-                        $dropdown = '<select name="gender" id="gender">
-                            <option value="male">Dhr</option>
-                            <option value="female" selected>Mvr</option>
-                            <option value="other">Anders</option>
-                        </select><br><br>';
-                    } else {
-                        $dropdown = '<select name="gender" id="gender">
-                        <option value="male">Dhr</option>
-                        <option value="female">Mvr</option>
-                        <option value="other" selected>Anders</option>
-                    </select><br><br>';}
-
-                    if($pref == "tlf") {
-                        $radio = '<p>Communicatievoorkeur: <h3 class="error">'. $prefErr .'</h3></p>
-                            
-                            
-                        <input type="radio" id="vtlf" name="pref" value="tlf" checked>
-                        <label for="vtlf">Telefoon</label><br>
-                        
-                        <input type="radio" id="vemail" name="pref" value="email">
-                        <label for="vemail">E-mail</label><br><br>';
-                    } elseif($pref == "email") {
-                        $radio = '<p>Communicatievoorkeur: <h3 class="error">'. $prefErr .'</h3></p> 
-                            
-                            
-                        <input type="radio" id="vtlf" name="pref" value="tlf" >
-                        <label for="vtlf">Telefoon</label><br>
-                        
-                        <input type="radio" id="vemail" name="pref" value="email" checked>
-                        <label for="vemail">E-mail</label><br><br>';
-                    } else {
-                        $radio = '<p>Communicatievoorkeur: <h3 class="error">'. $prefErr .'</h3></p>
-                            
-                            
-                        <input type="radio" id="vtlf" name="pref" value="tlf">
-                        <label for="vtlf">Telefoon</label><br>
-                        
-                        <input type="radio" id="vemail" name="pref" value="email">
-                        <label for="vemail">E-mail</label><br><br>';
-                    }
-
-                    
                     echo(
                         '<form class="body" method="post" action="contact.php">
                             <label for="gender">Aanhef:</label>
     
-                            ' . $dropdown . '
+                            <select name="gender" id="gender">
+                                <option value="male" ' . (($gender == "male") ? "selected" : "") . ' >Dhr</option>
+                                <option value="female" ' . (($gender == "female") ? "selected" : "") . ' >Mvr</option>
+                                <option value="other" ' . (($gender == "other") ? "selected" : "") . ' >Anders</option>
+                            </select><br><br>
     
                             <label for="name">Naam:</label>
-                            <input class="input" type="text" id="name" name="name" value=' . $name .'> <h3 class="error">'. $nameErr .'</h3><br><br>
+                            <input class="input" type="text" id="name" name="name" value=' . $name .'> <h3 class="error"> '. $nameErr .'</h3><br><br>
     
                             <label for="email">E-mail adres:</label>
-                            <input class="input" type="text" id="email" name="email" value='. $email . '><h3 class="error">'. $emailErr .'</h3><br><br>
+                            <input class="input" type="text" id="email" name="email" value='. $email . '><h3 class="error"> '. $emailErr .'</h3><br><br>
     
                             <label for="tlf">Telefoonnummer:</label>
-                            <input class="input" type="number" id="tlf" name="tlf"value='. $tlf .'><h3 class="error">'. $tlfErr .'</h3><br><br>
+                            <input class="input" type="number" id="tlf" name="tlf"value='. $tlf .'><h3 class="error"> '. $tlfErr .'</h3><br><br>
                             
-                            ' . $radio . ' 
+                            <p>Communicatievoorkeur: <h3 class="error"> '. $prefErr .'</h3></p>
+                            
+                            
+                            <input type="radio" id="vtlf" name="pref" value="tlf" ' . (($pref == "tlf") ? "checked" : "") . '>
+                            <label for="vtlf">Telefoon</label><br>
+                            
+                            <input type="radio" id="vemail" name="pref" value="email" ' . (($pref == "email") ? "checked" : "") . '>
+                            <label for="vemail">E-mail</label><br><br>
     
                             <textarea class="input" name="Text1" cols="40" rows="10">' . $text . '</textarea>
     
