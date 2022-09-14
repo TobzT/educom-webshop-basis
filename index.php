@@ -31,7 +31,7 @@ function getPageFromPost() {
 function showResponsePage($page) {
     beginDocument();
     showHead();
-    showBody();
+    showBody($page);
     endDocument();
 }
 
@@ -48,19 +48,19 @@ function showHead() {
     echo('</head>');
 }
 
-function showBody() {
+function showBody($page) {
     echo('<body>');
-    showHeader();
-    showContent();
+    showHeader($page);
+    showContent($page);
     showFooter();
     echo('</body>');
 
 }
 
-function showHeader() {
+function showHeader($page) {
    echo('
     <header>
-        <h1 class="header">Title</h1>
+        <h1 class="header">'. ucfirst($page) .'</h1>
         <ul class="list">
         <div class="divh"><li class="menu"><a href="index.php?page=home" class="menu">HOME</a></li></div>
         <div class="divh"><li class="menu"><a href="index.php?page=about"class="menu">ABOUT</a></li></div>
@@ -71,8 +71,39 @@ function showHeader() {
 }
 
 
-function showContent() {
-    //TODO
+function showContent($page) {
+    
+    switch($page) {
+        case "home":
+            showHomeContent();
+            break;
+        case "about":
+            showAboutContent();
+            break;
+        case "contact":
+            showContactContent();
+            break;
+        default:
+            showPageError();
+    }
+}
+
+function showHomeContent() {
+    echo('HOME CONTENT');
+}
+
+function showAboutContent() {
+    echo('ABOUT CONTENT');
+}
+
+function showContactContent() {
+    echo('CONTACT CONTENT');
+}
+
+function showPageError() {
+    echo('
+        <h1 class="error">PAGE ERROR</h1>
+    ');
 }
 
 function showFooter() {
@@ -88,7 +119,6 @@ function showFooter() {
 function endDocument() {
     echo('</html>');
 }
-
 
 
 function linkExternalCss() {
