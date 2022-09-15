@@ -44,9 +44,9 @@ function test_inputs($data) {
 
 function showGenericForm($nameErr, $emailErr) {
     
-    
+    $GENDERS = getGenders();
     echo('<form class="body" method="post" action="index.php?page=contact page="contact">');
-    showFormItem("gender", "dropdown", "Gender:", "", "", GENDERS); // IK KRIJG GENDERS NIET FUCKING GLOBAL
+    showFormItem("gender", "dropdown", "Gender:", "", "", $GENDERS);
     showFormItem("name", "text", "Name:", "", $nameErr);
     showFormItem("email", "email", "E-mail adres:", "", $emailErr);
     echo('<button>Submit</button></form>');
@@ -172,5 +172,12 @@ function showContactThanks($pronoun, $name, $email, $tlf, $pref, $text) {
         </p>
         '
     );
+}
+
+function getGenders() {
+    define("GENDERS", array("male" => "Dhr",
+                        "female" => "Mvr",
+                        "other" => "Anders"));
+    return GENDERS;
 }
 ?>

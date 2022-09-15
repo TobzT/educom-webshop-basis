@@ -12,11 +12,9 @@ showResponsePage($page);
 #CONSTANTS                                                   #
 ##############################################################
 
-define("GENDERS", array("male" => "Dhr",
-                        "female" => "Mvr",
-                        "other" => "Anders"));
 
-// var_dump(GENDERS);
+
+
 
 ##############################################################
 #FUNCTIONS                                                   #
