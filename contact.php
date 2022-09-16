@@ -5,6 +5,7 @@ function showContactContent() {
     $name = $email = $gender = $text = $pref = $tlf = "";
     $valid = false;
     $pronoun = "";
+
     validateContactForm();
     
 
@@ -28,8 +29,8 @@ function showContactContent() {
         showContactThanks($pronoun, $name, $email, $tlf, $pref, $text);
         
     } else {
-        showContactForm($gender, $name, $email, $tlf, $pref, $text, $nameErr, $emailErr, $tlfErr, $prefErr);
-        showGenericForm($nameErr, $emailErr);
+        // showContactForm($gender, $name, $email, $tlf, $pref, $text, $nameErr, $emailErr, $tlfErr, $prefErr);
+        showGenericForm("contact", $nameErr, $emailErr, $tlfErr, $prefErr);
         
     }
     
@@ -42,14 +43,29 @@ function test_inputs($data) {
     return $data;
 }
 
-function showGenericForm($nameErr, $emailErr) {
+function showGenericForm($page, $nameErr, $emailErr, $tlfErr, $prefErr) {
     
     $GENDERS = getGenders();
-    echo('<form class="body" method="post" action="index.php?page=contact page="contact">');
+    $OPTIONS = getOptions();
+    showFormStart();
+    
     showFormItem("gender", "dropdown", "Gender:", "", "", $GENDERS);
     showFormItem("name", "text", "Name:", "", $nameErr);
     showFormItem("email", "email", "E-mail adres:", "", $emailErr);
-    echo('<button>Submit</button></form>');
+    showFormItem("tlf", "number", "Telefoonnummer: ", "", $tlfErr);
+    showFormItem("radio", "radio", "Communicatievoorkeur: ", "", $prefErr, $OPTIONS);
+    showFormItem("Text1", "textarea", "", "", "");
+
+    showFormEnd("contact", "Submit");
+}
+
+function ShowFormStart() {
+    echo('<form class="body" method="post" action="index.php"s>');
+}
+
+function ShowFormEnd($page, $submitText) {
+    echo('<input type="hidden" name="page" value="'.$page.'">');
+    echo('<button>'.$submitText.'</button></form>');
 }
 
 function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
@@ -60,11 +76,28 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
                 <label for="'.$key.'">'.$labeltext.'</label>
                 <select name="'.$key.'" id="'.$key.'" >');
 
-        echo(repeatingForm($type, $options));
+        echo(repeatingForm($options));
 
         echo('</select></div><br>');
     } elseif ($type == "radio") {
-        // TODO
+        echo('
+            <div>
+            <p>'.$labeltext.'<h3 class="error"> '. $error .'</h3></p>
+
+            ');
+
+        echo(repeatingRadio($key, $error, $options));
+
+        echo('</div><br>');
+    } elseif ($type == "textarea") {
+        echo('
+            <div>
+            <label for="'.$key.'"></label>
+            <textarea class=input name="'.$key.'" cols="40" rows="10"></textarea>
+
+            </div>
+        ');
+    
     } else {
         echo('
             <div>
@@ -76,13 +109,26 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
     }
 }
 
-function repeatingForm($type, $options) {
+function repeatingForm($options) {
     
     $count = count($options);
     $keys = array_keys($options);
     for ($i = 0; $i < $count; $i++) {
         echo('<option value="'.$keys[$i].'">'.$options[$keys[$i]].'</option><br>');
     }
+}
+
+function repeatingRadio($key, $error, $options) {
+    $count = count($options);
+    $keys = array_keys($options);
+    for($i = 0; $i < $count; $i++) {
+        echo('
+            
+            <input type="radio" id="" name="'.$key.'" value="'.$options[$keys[$i]].'">
+            <label for="'.$key.'">'.$options[$keys[$i]].'</label><br>
+        ');
+    }
+    
 }
 
 function showContactForm($gender, $name, $email, $tlf, $pref, $text, $nameErr, $emailErr, $tlfErr, $prefErr) {
@@ -179,5 +225,12 @@ function getGenders() {
                         "female" => "Mvr",
                         "other" => "Anders"));
     return GENDERS;
+}
+
+function getOptions() {
+    define("OPTIONS", array("tlf" => "Telefoon",
+                        "email" => "E-mail"
+                        ));
+    return OPTIONS;
 }
 ?>
