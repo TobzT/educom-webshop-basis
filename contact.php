@@ -6,11 +6,12 @@ function showContactContent() {
     $valid = false;
     $pronoun = "";
 
-    validateContactForm();
+    $RESULTS = validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text);
     
-
-    if($valid == true) {
-        switch($gender) {
+    
+    var_dump($RESULTS);
+    if($RESULTS["valid"] == true) {
+        switch($RESULTS["gender"]) {
             case "male":
                 $pronoun = "dhr";
                 break;
@@ -18,7 +19,7 @@ function showContactContent() {
                 $pronoun = "mvr";
         }
         
-        switch($pref) {
+        switch($RESULTS["pref"]) {
             case "email":
                 $pref = "e-mail";
                 break;
@@ -26,11 +27,11 @@ function showContactContent() {
                 $pref = "telefoon";
         }
         
-        showContactThanks($pronoun, $name, $email, $tlf, $pref, $text);
+        showContactThanks($RESULTS, $pronoun);
         
     } else {
         // showContactForm($gender, $name, $email, $tlf, $pref, $text, $nameErr, $emailErr, $tlfErr, $prefErr);
-        showGenericForm("contact", $nameErr, $emailErr, $tlfErr, $prefErr);
+        showGenericForm("contact", $RESULTS);
         
     }
     
@@ -43,17 +44,17 @@ function test_inputs($data) {
     return $data;
 }
 
-function showGenericForm($page, $nameErr, $emailErr, $tlfErr, $prefErr) {
+function showGenericForm($page, $RESULTS) {
     
     $GENDERS = getGenders();
     $OPTIONS = getOptions();
     showFormStart();
     
-    showFormItem("gender", "dropdown", "Gender:", "", "", $GENDERS);
-    showFormItem("name", "text", "Name:", "", $nameErr);
-    showFormItem("email", "email", "E-mail adres:", "", $emailErr);
-    showFormItem("tlf", "number", "Telefoonnummer: ", "", $tlfErr);
-    showFormItem("radio", "radio", "Communicatievoorkeur: ", "", $prefErr, $OPTIONS);
+    showFormItem("gender", "dropdown", "Gender:", $RESULTS["gender"], "", $GENDERS);
+    showFormItem("name", "text", "Name:", $RESULTS["name"], $RESULTS["nameErr"]);
+    showFormItem("email", "email", "E-mail adres:", $RESULTS["email"], $RESULTS["emailErr"]);
+    showFormItem("tlf", "number", "Telefoonnummer: ", $RESULTS["tlf"], $RESULTS["tlfErr"]);
+    showFormItem("pref", "radio", "Communicatievoorkeur: ", $RESULTS["pref"], $RESULTS["prefErr"], $OPTIONS);
     showFormItem("Text1", "textarea", "", "", "");
 
     showFormEnd("contact", "Submit");
@@ -76,7 +77,7 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
                 <label for="'.$key.'">'.$labeltext.'</label>
                 <select name="'.$key.'" id="'.$key.'" >');
 
-        echo(repeatingForm($options));
+        echo(repeatingForm($options, $value));
 
         echo('</select></div><br>');
     } elseif ($type == "radio") {
@@ -102,19 +103,20 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
         echo('
             <div>
                 <label for="'.$key.'">'.$labeltext.'</label>
-                <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'.$value.' ">
-                <span class="error">'.$error.'</span>
+                <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'. $value .' ">
+                
+                <h3 class="error">'.$error.'</h3>
             </div><br>
-        ');
+        '); // value werkt niet voor tlf??
     }
 }
 
-function repeatingForm($options) {
+function repeatingForm($options, $value) {
     
     $count = count($options);
     $keys = array_keys($options);
     for ($i = 0; $i < $count; $i++) {
-        echo('<option value="'.$keys[$i].'">'.$options[$keys[$i]].'</option><br>');
+        echo('<option value="'.$keys[$i].'"'.(($value == $keys[$i]) ? "selected" : "").'>'.$options[$keys[$i]].'</option><br>');
     }
 }
 
@@ -162,40 +164,43 @@ function showContactForm($gender, $name, $email, $tlf, $pref, $text, $nameErr, $
 
             <textarea class="input" name="Text1" cols="40" rows="10">' . $text . '</textarea>
 
+            <input type="hidden" name="page" value="contact">
             <br><br>
             <button>Submit</button>
         </form>'
     );
 }
 
-function validateContactForm() {
+function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text) {
     if($_SERVER["REQUEST_METHOD"] == "POST") {
+        
         $valid = true;
         $gender = test_inputs($_POST["gender"]);
         
-        if(empty($_POST["name"])) {
+        if(empty(test_inputs($_POST["name"]))) {
             $nameErr = "Je moet je naam invullen.";
             $valid = false;
         } else {
             $name = test_inputs($_POST["name"]);
         }
 
-        if(empty($_POST["email"])) {
+
+        if(empty(test_inputs($_POST["email"]))) {
             $emailErr = "Je moet je e-mail adres invullen.";
             $valid = false;
         } else {
             $email = test_inputs($_POST["email"]);
         }
 
-        if(empty($_POST["tlf"])) {
+        if(empty(test_inputs($_POST["tlf"]))) {
             $tlfErr = "Je moet je telefoonnummer invullen.";
             $valid = false;
         } else {
             $tlf = test_inputs($_POST["tlf"]);
         }
-        
+
         if(empty($_POST["pref"])) {
-            $prefErr = "Je moet een voorkeur kiezen";
+            $prefErr = "Je moet een voorkeur kiezen.";
             $valid = false;
         } else {
             $pref = test_inputs($_POST["pref"]);
@@ -203,18 +208,22 @@ function validateContactForm() {
 
         $text = test_inputs($_POST["Text1"]);
     }
+    return array("valid" => $valid, "gender" => $gender, "name" => $name, "nameErr" => $nameErr,
+                     "email" => $email, "emailErr" => $emailErr, "tlf" => (int) $tlf, "tlfErr" => $tlfErr,
+                     "pref" => $pref, "prefErr" => $prefErr, "text" => $text
+                    );
 }
 
-function showContactThanks($pronoun, $name, $email, $tlf, $pref, $text) {
+function showContactThanks($RESULTS, $pronoun) {
     echo(
         '<p class="body">
-            Dankjewel ' . $pronoun . " " . ucfirst($name) . '! <br> <br>
+            Dankjewel ' . $pronoun . " " . ucfirst($RESULTS["name"]) . '! <br> <br>
 
-            Jouw e-mail adres is ' . $email . '. <br>
-            Jouw telefoonnummer is ' . $tlf . '. <br>
-            Jouw voorkeur is ' . $pref . '. <br> <br>
+            Jouw e-mail adres is ' . $RESULTS["email"] . '. <br>
+            Jouw telefoonnummer is ' . $RESULTS["tlf"] . '. <br>
+            Jouw voorkeur is ' . $RESULTS["pref"] . '. <br> <br>
             
-            ' . $text . '
+            ' . $RESULTS["text"] . '
         </p>
         '
     );
