@@ -30,7 +30,6 @@ function showContactContent() {
         showContactThanks($RESULTS, $pronoun);
         
     } else {
-        // showContactForm($gender, $name, $email, $tlf, $pref, $text, $nameErr, $emailErr, $tlfErr, $prefErr);
         showGenericForm("contact", $RESULTS);
         
     }
@@ -53,7 +52,7 @@ function showGenericForm($page, $RESULTS) {
     showFormItem("gender", "dropdown", "Gender:", $RESULTS["gender"], "", $GENDERS);
     showFormItem("name", "text", "Name:", $RESULTS["name"], $RESULTS["nameErr"]);
     showFormItem("email", "email", "E-mail adres:", $RESULTS["email"], $RESULTS["emailErr"]);
-    showFormItem("tlf", "number", "Telefoonnummer: ", $RESULTS["tlf"], $RESULTS["tlfErr"]);
+    showFormItem("tlf", "text", "Telefoonnummer: ", $RESULTS["tlf"], $RESULTS["tlfErr"]);
     showFormItem("pref", "radio", "Communicatievoorkeur: ", $RESULTS["pref"], $RESULTS["prefErr"], $OPTIONS);
     showFormItem("Text1", "textarea", "", "", "");
 
@@ -107,7 +106,7 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
                 
                 <h3 class="error">'.$error.'</h3>
             </div><br>
-        '); // value werkt niet voor tlf??
+        ');
     }
 }
 
@@ -123,7 +122,7 @@ function repeatingForm($options, $value) {
 function repeatingRadio($key, $error, $options) {
     $count = count($options);
     $keys = array_keys($options);
-    for($i = 0; $i < $count; $i++) {
+    for($i = 0; $i < $count; $i++) {// TODO checked
         echo('
             
             <input type="radio" id="" name="'.$key.'" value="'.$options[$keys[$i]].'">
@@ -133,43 +132,6 @@ function repeatingRadio($key, $error, $options) {
     
 }
 
-function showContactForm($gender, $name, $email, $tlf, $pref, $text, $nameErr, $emailErr, $tlfErr, $prefErr) {
-    echo(
-        '<form class="body" method="post" action="contact.php">
-            <label for="gender">Aanhef:</label>
-
-            <select name="gender" id="gender">
-                <option value="male" ' . (($gender == "male") ? "selected" : "") . ' >Dhr</option>
-                <option value="female" ' . (($gender == "female") ? "selected" : "") . ' >Mvr</option>
-                <option value="other" ' . (($gender == "other") ? "selected" : "") . ' >Anders</option>
-            </select><br><br>
-
-            <label for="name">Naam:</label>
-            <input class="input" type="text" id="name" name="name" value=' . $name .'> <h3 class="error"> '. $nameErr .'</h3><br><br>
-
-            <label for="email">E-mail adres:</label>
-            <input class="input" type="text" id="email" name="email" value='. $email . '><h3 class="error"> '. $emailErr .'</h3><br><br>
-
-            <label for="tlf">Telefoonnummer:</label>
-            <input class="input" type="number" id="tlf" name="tlf"value='. $tlf .'><h3 class="error"> '. $tlfErr .'</h3><br><br>
-            
-            <p>Communicatievoorkeur: <h3 class="error"> '. $prefErr .'</h3></p>
-            
-            
-            <input type="radio" id="vtlf" name="pref" value="tlf" ' . (($pref == "tlf") ? "checked" : "") . '>
-            <label for="vtlf">Telefoon</label><br>
-            
-            <input type="radio" id="vemail" name="pref" value="email" ' . (($pref == "email") ? "checked" : "") . '>
-            <label for="vemail">E-mail</label><br><br>
-
-            <textarea class="input" name="Text1" cols="40" rows="10">' . $text . '</textarea>
-
-            <input type="hidden" name="page" value="contact">
-            <br><br>
-            <button>Submit</button>
-        </form>'
-    );
-}
 
 function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text) {
     if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -209,7 +171,7 @@ function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr
         $text = test_inputs($_POST["Text1"]);
     }
     return array("valid" => $valid, "gender" => $gender, "name" => $name, "nameErr" => $nameErr,
-                     "email" => $email, "emailErr" => $emailErr, "tlf" => (int) $tlf, "tlfErr" => $tlfErr,
+                     "email" => $email, "emailErr" => $emailErr, "tlf" => $tlf, "tlfErr" => $tlfErr,
                      "pref" => $pref, "prefErr" => $prefErr, "text" => $text
                     );
 }
