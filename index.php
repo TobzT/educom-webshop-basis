@@ -28,7 +28,7 @@ function getRequestedPage() {
         return getVarFromArray($_POST, 'page');
     }
 }
-function getVarFromArray($array, $key, $default = '') {
+function getVarFromArray($array, $key, $default = 'home') {
     return isset($array[$key]) ? $array[$key] : $default;
 }
 
