@@ -52,43 +52,51 @@ function ShowFormEnd($page, $submitText) {
 
 function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
     
-    if ($type == "dropdown") {
-        echo('
-            <div>
-                <label for="'.$key.'">'.$labeltext.'</label>
-                <select name="'.$key.'" id="'.$key.'" >');
 
-        echo(repeatingForm($options, $value));
+    switch ($type) {
+        case "dropdown":
+            echo('
+                <div>
+                    <label for="'.$key.'">'.$labeltext.'</label>
+                    <select name="'.$key.'" id="'.$key.'" >');
 
-        echo('</select></div><br>');
-    } elseif ($type == "radio") {
-        echo('
-            <div>
-            <p>'.$labeltext.'<h3 class="error"> '. $error .'</h3></p>
+            echo(repeatingForm($options, $value));
+
+            echo('</select></div><br>');
+            break;
+        
+        case "radio":
+            echo('
+                <div>
+                <p>'.$labeltext.'<h3 class="error"> '. $error .'</h3></p>
 
             ');
 
-        echo(repeatingRadio($key, $error, $options));
+            echo(repeatingRadio($key, $error, $options));
 
-        echo('</div><br>');
-    } elseif ($type == "textarea") {
-        echo('
-            <div>
-            <label for="'.$key.'"></label>
-            <textarea class=input name="'.$key.'" cols="40" rows="10"></textarea>
+            echo('</div><br>');
+            break;
+        
+        case "textarea":
+            echo('
+                <div>
+                <label for="'.$key.'"></label>
+                <textarea class=input name="'.$key.'" cols="40" rows="10"></textarea>
 
-            </div>
-        ');
-    
-    } else {
-        echo('
-            <div>
-                <label for="'.$key.'">'.$labeltext.'</label>
-                <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'. $value .' ">
-                
-                <h3 class="error">'.$error.'</h3>
-            </div><br>
-        ');
+                </div>
+            ');
+            break;
+        
+        default:
+            echo('
+                <div>
+                    <label for="'.$key.'">'.$labeltext.'</label>
+                    <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'. $value .' ">
+                    
+                    <h3 class="error">'.$error.'</h3>
+                </div><br>
+            ');
+            break;
     }
 }
 
