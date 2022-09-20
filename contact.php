@@ -52,52 +52,49 @@ function ShowFormEnd($page, $submitText) {
 
 function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
     
-
+    echo('<div>
+        <label for="'.$key.'">'.$labeltext.'</label>'
+    );
+    
     switch ($type) {
         case "dropdown":
             echo('
-                <div>
-                    <label for="'.$key.'">'.$labeltext.'</label>
                     <select name="'.$key.'" id="'.$key.'" >');
 
             echo(repeatingForm($options, $value));
 
-            echo('</select></div><br>');
+            echo('</select>');
             break;
         
         case "radio":
             echo('
-                <div>
                 <p>'.$labeltext.'<h3 class="error"> '. $error .'</h3></p>
-
             ');
 
             echo(repeatingRadio($key, $error, $options));
 
-            echo('</div><br>');
+            
             break;
         
         case "textarea":
             echo('
-                <div>
-                <label for="'.$key.'"></label>
+                
                 <textarea class=input name="'.$key.'" cols="40" rows="10"></textarea>
 
-                </div>
+                
             ');
             break;
         
         default:
             echo('
-                <div>
-                    <label for="'.$key.'">'.$labeltext.'</label>
                     <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'. $value .' ">
                     
                     <h3 class="error">'.$error.'</h3>
-                </div><br>
+                
             ');
             break;
     }
+    echo('</div><br>');
 }
 
 function repeatingForm($options, $value) {
