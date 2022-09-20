@@ -1,33 +1,15 @@
 <?php 
 function showContactContent() {
     
-    $nameErr = $emailErr = $tlfErr = $prefErr = "";
-    $name = $email = $gender = $text = $pref = $tlf = "";
-    $valid = false;
-    $pronoun = "";
+    
+    
 
-    $RESULTS = validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text);
+    $RESULTS = getResults();
     
     
     var_dump($RESULTS);
     if($RESULTS["valid"] == true) {
-        switch($RESULTS["gender"]) {
-            case "male":
-                $pronoun = "dhr";
-                break;
-            case "female":
-                $pronoun = "mvr";
-        }
-        
-        switch($RESULTS["pref"]) {
-            case "email":
-                $pref = "e-mail";
-                break;
-            case "tlf":
-                $pref = "telefoon";
-        }
-        
-        showContactThanks($RESULTS, $pronoun);
+        showContactThanks($RESULTS);
         
     } else {
         showGenericForm("contact", $RESULTS);
@@ -120,18 +102,23 @@ function repeatingForm($options, $value) {
 }
 
 function repeatingRadio($key, $error, $options) {
+    $RESULTS = getResults();
     $count = count($options);
     $keys = array_keys($options);
-    for($i = 0; $i < $count; $i++) {// TODO checked
+    
+    for($i = 0; $i < $count; $i++) {
+        $checked = radioCheck($options, $keys, $i, $RESULTS);
         echo('
-            
-            <input type="radio" id="" name="'.$key.'" value="'.$options[$keys[$i]].'">
+            <input type="radio" id="" name="'.$key.'" value="'.$options[$keys[$i]].'"'.$checked.'>
             <label for="'.$key.'">'.$options[$keys[$i]].'</label><br>
         ');
     }
     
 }
 
+function radioCheck($options, $keys, $i, $results) {
+    return ($results['pref'] == $options[$keys[$i]]) ? "checked" : "";
+}
 
 function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text) {
     if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -176,10 +163,11 @@ function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr
                     );
 }
 
-function showContactThanks($RESULTS, $pronoun) {
+function showContactThanks($RESULTS) {
+    $GENDERS = getGenders();
     echo(
         '<p class="body">
-            Dankjewel ' . $pronoun . " " . ucfirst($RESULTS["name"]) . '! <br> <br>
+            Dankjewel ' . $GENDERS[$RESULTS['gender']] . " " . ucfirst($RESULTS["name"]) . '! <br> <br>
 
             Jouw e-mail adres is ' . $RESULTS["email"] . '. <br>
             Jouw telefoonnummer is ' . $RESULTS["tlf"] . '. <br>
@@ -203,5 +191,13 @@ function getOptions() {
                         "email" => "E-mail"
                         ));
     return OPTIONS;
+}
+
+function getResults() {
+    $nameErr = $emailErr = $tlfErr = $prefErr = "";
+    $name = $email = $gender = $text = $pref = $tlf = "";
+    $valid = false;
+    
+    return validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text);
 }
 ?>
