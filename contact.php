@@ -82,7 +82,7 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
         
         default:
             echo('
-                    <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'. $value .' ">
+                    <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'. $value .'">
                     
                     <h3 class="error">'.$error.'</h3>
                 
