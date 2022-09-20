@@ -1,13 +1,13 @@
 <?php 
 function showContactContent() {
-    $RESULTS = getResults();
+    $data = getdata();
 
-    // var_dump($RESULTS);
-    if($RESULTS["valid"] == true) {
-        showContactThanks($RESULTS);
+    // var_dump($data);
+    if($data["valid"] == true) {
+        showContactThanks($data);
         
     } else {
-        showGenericForm("contact", $RESULTS);
+        showGenericForm("contact", $data);
         
     }
     
@@ -20,17 +20,17 @@ function test_inputs($data) {
     return $data;
 }
 
-function showGenericForm($page, $RESULTS) {
+function showGenericForm($page, $data) {
     
     $GENDERS = getGenders();
     $OPTIONS = getOptions();
     showFormStart();
     
-    showFormItem("gender", "dropdown", "Gender:", $RESULTS["gender"], "", $GENDERS);
-    showFormItem("name", "text", "Name:", $RESULTS["name"], $RESULTS["nameErr"]);
-    showFormItem("email", "email", "E-mail adres:", $RESULTS["email"], $RESULTS["emailErr"]);
-    showFormItem("tlf", "text", "Telefoonnummer: ", $RESULTS["tlf"], $RESULTS["tlfErr"]);
-    showFormItem("pref", "radio", "Communicatievoorkeur: ", $RESULTS["pref"], $RESULTS["prefErr"], $OPTIONS);
+    showFormItem("gender", "dropdown", "Gender:", $data["gender"], "", $GENDERS);
+    showFormItem("name", "text", "Name:", $data["name"], $data["nameErr"]);
+    showFormItem("email", "email", "E-mail adres:", $data["email"], $data["emailErr"]);
+    showFormItem("tlf", "text", "Telefoonnummer: ", $data["tlf"], $data["tlfErr"]);
+    showFormItem("pref", "radio", "Communicatievoorkeur: ", $data["pref"], $data["prefErr"], $OPTIONS);
     showFormItem("Text1", "textarea", "", "", "");
 
     showFormEnd("contact", "Submit");
@@ -102,12 +102,12 @@ function repeatingForm($options, $value) {
 }
 
 function repeatingRadio($key, $options) {
-    $RESULTS = getResults();
+    $data = getdata();
     $count = count($options);
     $keys = array_keys($options);
     
     for($i = 0; $i < $count; $i++) {
-        $checked = radioCheck($options, $keys, $i, $RESULTS);
+        $checked = radioCheck($options, $keys, $i, $data);
         echo('
             <input type="radio" id="" name="'.$key.'" value="'.$options[$keys[$i]].'"'.$checked.'>
             <label for="'.$key.'">'.$options[$keys[$i]].'</label><br>
@@ -116,8 +116,8 @@ function repeatingRadio($key, $options) {
     
 }
 
-function radioCheck($options, $keys, $i, $results) {
-    return ($results['pref'] == $options[$keys[$i]]) ? "checked" : "";
+function radioCheck($options, $keys, $i, $data) {
+    return ($data['pref'] == $options[$keys[$i]]) ? "checked" : "";
 }
 
 function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text) {
@@ -163,17 +163,17 @@ function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr
                     );
 }
 
-function showContactThanks($RESULTS) {
+function showContactThanks($data) {
     $GENDERS = getGenders();
     echo(
         '<p class="body">
-            Dankjewel ' . $GENDERS[$RESULTS['gender']] . " " . ucfirst($RESULTS["name"]) . '! <br> <br>
+            Dankjewel ' . $GENDERS[$data['gender']] . " " . ucfirst($data["name"]) . '! <br> <br>
 
-            Jouw e-mail adres is ' . $RESULTS["email"] . '. <br>
-            Jouw telefoonnummer is ' . $RESULTS["tlf"] . '. <br>
-            Jouw voorkeur is ' . $RESULTS["pref"] . '. <br> <br>
+            Jouw e-mail adres is ' . $data["email"] . '. <br>
+            Jouw telefoonnummer is ' . $data["tlf"] . '. <br>
+            Jouw voorkeur is ' . $data["pref"] . '. <br> <br>
             
-            ' . $RESULTS["text"] . '
+            ' . $data["text"] . '
         </p>
         '
     );
@@ -193,7 +193,7 @@ function getOptions() {
     return OPTIONS;
 }
 
-function getResults() {
+function getdata() {
     $nameErr = $emailErr = $tlfErr = $prefErr = "";
     $name = $email = $gender = $text = $pref = $tlf = "";
     $valid = false;
