@@ -1,13 +1,8 @@
 <?php 
 function showContactContent() {
-    
-    
-    
-
     $RESULTS = getResults();
-    
-    
-    var_dump($RESULTS);
+
+    // var_dump($RESULTS);
     if($RESULTS["valid"] == true) {
         showContactThanks($RESULTS);
         
@@ -129,38 +124,38 @@ function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $valid = true;
-        $gender = test_inputs($_POST["gender"]);
+        $gender = test_inputs(getVarFromArray($_POST, "gender"));
         
-        if(empty(test_inputs($_POST["name"]))) {
+        if(empty(test_inputs(getVarFromArray($_POST, "name")))) {
             $nameErr = "Je moet je naam invullen.";
             $valid = false;
         } else {
-            $name = test_inputs($_POST["name"]);
+            $name = test_inputs(getVarFromArray($_POST, "name"));
         }
 
 
-        if(empty(test_inputs($_POST["email"]))) {
+        if(empty(test_inputs(getVarFromArray($_POST, "email")))) {
             $emailErr = "Je moet je e-mail adres invullen.";
             $valid = false;
         } else {
-            $email = test_inputs($_POST["email"]);
+            $email = test_inputs(getVarFromArray($_POST, "email"));
         }
 
-        if(empty(test_inputs($_POST["tlf"]))) {
+        if(empty(test_inputs(getVarFromArray($_POST, "tlf")))) {
             $tlfErr = "Je moet je telefoonnummer invullen.";
             $valid = false;
         } else {
-            $tlf = test_inputs($_POST["tlf"]);
+            $tlf = test_inputs(getVarFromArray($_POST, "tlf"));
         }
 
-        if(empty($_POST["pref"])) {
+        if(empty(getVarFromArray($_POST, "pref"))) {
             $prefErr = "Je moet een voorkeur kiezen.";
             $valid = false;
         } else {
-            $pref = test_inputs($_POST["pref"]);
+            $pref = test_inputs(getVarFromArray($_POST, "pref"));
         }
 
-        $text = test_inputs($_POST["Text1"]);
+        $text = test_inputs(getVarFromArray($_POST, "Text1"));
     }
     return array("valid" => $valid, "gender" => $gender, "name" => $name, "nameErr" => $nameErr,
                      "email" => $email, "emailErr" => $emailErr, "tlf" => $tlf, "tlfErr" => $tlfErr,
