@@ -23,19 +23,15 @@ showResponsePage($page);
 function getRequestedPage() {
     $request_type = $_SERVER["REQUEST_METHOD"];
     if ($request_type == "GET") {
-        return getPageFromGet();
+        return getVarFromArray($_GET, 'page');
     } else {
-        return getPageFromPost();
+        return getVarFromArray($_POST, 'page');
     }
 }
-
-function getPageFromGet() {
-    return $_GET['page'];
+function getVarFromArray($array, $key, $default = '') {
+    return isset($array[$key]) ? $array[$key] : $default;
 }
 
-function getPageFromPost() {
-    return $_POST['page'];
-}
 
 function showResponsePage($page) {
     beginDocument();
