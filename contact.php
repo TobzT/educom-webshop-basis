@@ -68,10 +68,10 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
         
         case "radio":
             echo('
-                <p>'.$labeltext.'<h3 class="error"> '. $error .'</h3></p>
+                <p><h3 class="error"> '. $error .'</h3></p>
             ');
 
-            echo(repeatingRadio($key, $error, $options));
+            echo(repeatingRadio($key, $options));
 
             
             break;
@@ -106,7 +106,7 @@ function repeatingForm($options, $value) {
     }
 }
 
-function repeatingRadio($key, $error, $options) {
+function repeatingRadio($key, $options) {
     $RESULTS = getResults();
     $count = count($options);
     $keys = array_keys($options);
