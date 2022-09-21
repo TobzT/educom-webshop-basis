@@ -1,11 +1,7 @@
 <?php 
 require_once("contact.php");
 function showRegisterContent() {
-    $data = array("valid" => true, "name" => "", "nameErr" => "", "pw" => "", "cpw" => "", "pwErr" => "", "email" => "", "emailErr" => "");
-    if($_SERVER['REQUEST_METHOD'] == "POST") {
-
-        $data = validateRegistration(".\users\users.txt");
-    }
+    $data = getRegisterData();
     
     showFormStart();
 
@@ -14,6 +10,15 @@ function showRegisterContent() {
     showFormItem("pw", "password", "Password:", $data["pw"], $data["pwErr"]);
     showFormItem("cpw", "password", "Confirm Password:", $data["cpw"], "");
     showFormEnd("register", "Sign Up");
+}
+
+function getRegisterData() {
+    $data = array("valid" => true, "name" => "", "nameErr" => "", "pw" => "", "cpw" => "", "pwErr" => "", "email" => "", "emailErr" => "");
+    if($_SERVER['REQUEST_METHOD'] == "POST") {
+
+        $data = validateRegistration(".\users\users.txt");
+    }
+    return $data;
 }
 
 function validateRegistration($filename) {
