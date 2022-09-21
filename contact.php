@@ -31,7 +31,7 @@ function showGenericForm($page, $data) {
     showFormItem("email", "email", "E-mail adres:", $data["email"], $data["emailErr"]);
     showFormItem("tlf", "text", "Telefoonnummer: ", $data["tlf"], $data["tlfErr"]);
     showFormItem("pref", "radio", "Communicatievoorkeur: ", $data["pref"], $data["prefErr"], $OPTIONS);
-    showFormItem("Text1", "textarea", "", "", "");
+    showFormItem("text", "textarea", "", $data["text"], "");
 
     showFormEnd("contact", "Submit");
 }
