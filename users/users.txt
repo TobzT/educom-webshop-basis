@@ -1,7 +1,4 @@
 [email]|[naam]|[wachtwoord]
 coach@man-kind.nl|Geert Weggemans|halt!
-TEST|TEST|TEST
-TEST|TEST|TEST
-TEST|TEST|TEST
-TEST|TEST|TEST
-TEST|TEST|TEST
+niks@niemand.nl|Tobz|1234
+niks@niemand2.nl|Tobz|1234
