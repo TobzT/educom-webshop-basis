@@ -2,3 +2,12 @@
 coach@man-kind.nl|Geert Weggemans|halt!
 niks@niemand.nl|Tobz|1234
 niks@niemand2.nl|Tobz|1234
+t@test.nl|T|1234
+tobz@test.nl|t|1234
+test2@test.nl|test|1234
+test3@test.nl|T|1234
+testing@testing.nl|t|1234
+testing@testin2g.nl|t|1234
+12345@emal.nl|1234|1234
+123455@emal.nl|1234|1234
+tobz@the.nl|T|1234

@@ -31,10 +31,18 @@ function findEmailInFile($filename, $string) {
     return $result;
 }
 
+function session_test(){
+    session_start();
+
+    $_SESSION['dest'] = "test";
+    print_r($_SESSION);
+}
+
 
 // myWriteFile("users.txt", "TEST|TEST|TEST");
 // myReadFile("users.txt");
-findEmailInFile("users.txt", "Tobias@conceptuals.nl");
+// findEmailInFile("users.txt", "Tobias@conceptuals.nl");
 // findEmailInFile("users.txt", "TEST");
+session_test();
 
 ?>
