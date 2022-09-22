@@ -1,7 +1,10 @@
 <?php 
 require_once("contact.php");
+require_once("login.php");
+require_once("index.php");
 function showRegisterContent() {
     $data = getRegisterData();
+    
     
     showFormStart();
 
@@ -9,20 +12,24 @@ function showRegisterContent() {
     showFormItem("email", "email", "E-mail:", $data["email"], $data["emailErr"]);
     showFormItem("pw", "password", "Password:", $data["pw"], $data["pwErr"]);
     showFormItem("cpw", "password", "Confirm Password:", $data["cpw"], "");
-    showFormEnd("register", "Sign Up");
+    
+    showFormEnd($data["dest"], "Sign Up");
+    
 }
 
 function getRegisterData() {
-    $data = array("valid" => true, "name" => "", "nameErr" => "", "pw" => "", "cpw" => "", "pwErr" => "", "email" => "", "emailErr" => "");
+    $data = array("valid" => NULL, "name" => "", "nameErr" => "", "pw" => "", "cpw" => "", "pwErr" => "", "email" => "", "emailErr" => "", "dest" => "register");
     if($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $data = validateRegistration(".\users\users.txt");
+
     }
     return $data;
 }
 
 function validateRegistration($filename) {
-    $nameErr = $pwErr = $emailErr = "";
+    $nameErr = $pwErr = $emailErr =  "";
+    $dest = "register";
     $valid = true;
     $name = test_inputs(getVarFromArray($_POST, "name"));
     $email = strtolower(test_inputs(getVarFromArray($_POST, "email")));
@@ -58,9 +65,10 @@ function validateRegistration($filename) {
     if ($valid) {
         $message = $email . "|" . $name . "|" . $pw;
         myWriteToFile($filename, $message);
+        $dest = "login";
     }
     
-    return array("valid" => $valid, "name" => $name, "nameErr" => $nameErr, "pw" => $pw, "cpw" => $cpw, "pwErr" => $pwErr, "email" => $email, "emailErr" => $emailErr);
+    return array("valid" => $valid, "name" => $name, "nameErr" => $nameErr, "pw" => $pw, "cpw" => $cpw, "pwErr" => $pwErr, "email" => $email, "emailErr" => $emailErr, "dest" => $dest);
 
 }
 
