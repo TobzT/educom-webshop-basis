@@ -1,18 +1,85 @@
 <?php 
-function showContactContent() {
-    $data = getdata();
+require_once('./3 Data/data.php');
 
-    // var_dump($data);
-    if($data["valid"] == true) {
-        showContactThanks($data);
-        
-    } else {
-        showGenericForm("contact", $data);
-        
-    }
-    
+function getGenders() {
+    define("GENDERS", array("male" => "Dhr",
+                        "female" => "Mvr",
+                        "other" => "Anders"));
+    return GENDERS;
 }
 
+function getOptions() {
+    define("OPTIONS", array("tlf" => "Telefoon",
+                        "email" => "E-mail"
+                        ));
+    return OPTIONS;
+}
+
+//LOGIN
+
+
+//REGISTER
+function getRegisterData() {
+    $data = array("valid" => NULL, "name" => "", "nameErr" => "", "pw" => "", "cpw" => "", "pwErr" => "", "email" => "", "emailErr" => "", "dest" => "register");
+    if($_SERVER['REQUEST_METHOD'] == "POST") {
+
+        $data = validateRegistration(".\users\users.txt");
+    }
+    return $data;
+}
+
+function validateRegistration($filename) {
+    $nameErr = $pwErr = $emailErr =  "";
+    $dest = "register";
+    $valid = true;
+    $name = test_inputs(getVarFromArray($_POST, "name"));
+    $email = strtolower(test_inputs(getVarFromArray($_POST, "email")));
+    $pw = test_inputs(getVarFromArray($_POST, "pw"));
+    $cpw = test_inputs(getVarFromArray($_POST, "cpw"));
+
+    if(empty($name)){
+        $valid = false;
+        $nameErr = "Please enter your name.";
+    }
+    
+    if (empty($pw)) {
+        $valid = false;
+        $pwErr = "Please enter your password.";
+    }
+
+    if (empty($email)) {
+        $valid = false;
+        $emailErr = "Please enter your e-mail.";
+    }
+
+    if ($pw !== $cpw){
+        $valid = false;
+        $pwErr = "Passwords do not match";
+    }
+
+    if (findEmailInFile($filename, $email)) {
+        $valid = false;
+        $emailErr = "E-mail found in database";
+    }
+
+    
+    if ($valid) {
+        $message = $email . "|" . $name . "|" . $pw;
+        saveInDb($filename, $message);
+        $dest = "login";
+    }
+    
+    return array("valid" => $valid, "name" => $name, "nameErr" => $nameErr, "pw" => $pw, "cpw" => $cpw, "pwErr" => $pwErr, "email" => $email, "emailErr" => $emailErr, "dest" => $dest);
+
+}
+
+//HOME
+
+
+//ABOUT
+
+
+//CONTACT
 function test_inputs($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -33,16 +100,7 @@ function showGenericForm($page, $data) {
     showFormItem("pref", "radio", "Communicatievoorkeur: ", $data["pref"], $data["prefErr"], $OPTIONS);
     showFormItem("text", "textarea", "", $data["text"], "");
 
-    showFormEnd("contact", "Submit");
-}
-
-function ShowFormStart() {
-    echo('<form class="body" method="post" action="index.php"s>');
-}
-
-function ShowFormEnd($page, $submitText) {
-    echo('<input type="hidden" name="page" value="'.$page.'">');
-    echo('<button>'.$submitText.'</button></form>');
+    showFormEnd($page, "Submit");
 }
 
 function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
@@ -68,7 +126,6 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
 
             echo(repeatingRadio($key, $options));
 
-            
             break;
         
         case "textarea":
@@ -102,7 +159,7 @@ function repeatingForm($options, $value) {
 }
 
 function repeatingRadio($key, $options) {
-    $data = getdata();
+    $data = getData();
     $count = count($options);
     $keys = array_keys($options);
     
@@ -163,37 +220,7 @@ function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr
                     );
 }
 
-function showContactThanks($data) {
-    $GENDERS = getGenders();
-    echo(
-        '<p class="body">
-            Dankjewel ' . $GENDERS[$data['gender']] . " " . ucfirst($data["name"]) . '! <br> <br>
-
-            Jouw e-mail adres is ' . $data["email"] . '. <br>
-            Jouw telefoonnummer is ' . $data["tlf"] . '. <br>
-            Jouw voorkeur is ' . $data["pref"] . '. <br> <br>
-            
-            ' . $data["text"] . '
-        </p>
-        '
-    );
-}
-
-function getGenders() {
-    define("GENDERS", array("male" => "Dhr",
-                        "female" => "Mvr",
-                        "other" => "Anders"));
-    return GENDERS;
-}
-
-function getOptions() {
-    define("OPTIONS", array("tlf" => "Telefoon",
-                        "email" => "E-mail"
-                        ));
-    return OPTIONS;
-}
-
-function getdata() {
+function getData() {
     $nameErr = $emailErr = $tlfErr = $prefErr = "";
     $name = $email = $gender = $text = $pref = $tlf = "";
     $valid = false;

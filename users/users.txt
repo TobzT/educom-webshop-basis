@@ -11,3 +11,6 @@ testing@testin2g.nl|t|1234
 12345@emal.nl|1234|1234
 123455@emal.nl|1234|1234
 tobz@the.nl|T|1234
+amog@us.nl|T|1234
+amog@sus.nl|t|1234
+amog@sussy.nl|T|1234

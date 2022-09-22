@@ -3,21 +3,10 @@
 ##############################################################
 #MAIN APP                                                    #
 ##############################################################
-require_once("home.php");
-require_once("about.php");
-require_once("contact.php");
-require_once("register.php");
-require_once("login.php");
+require_once("./1 Presentation/show.php");
+
 $page = getRequestedPage();
 showResponsePage($page);
-##############################################################
-#CONSTANTS                                                   #
-##############################################################
-
-
-
-
-
 ##############################################################
 #FUNCTIONS                                                   #
 ##############################################################
@@ -43,46 +32,7 @@ function showResponsePage($page) {
     
 }
 
-function beginDocument() {
-    echo('
-        <!DOCTYPE html>
-        <html>
-    ');
-}
 
-function showHead() {
-    echo('<head>');
-    linkExternalCss();
-    echo('</head>');
-}
-
-function showBody($page) {
-    echo('<body> <div class="container">');
-    showHeader($page);
-    showContent($page);
-    showFooter();
-    echo('</div> </body>');
-    
-
-}
-
-function showHeader($page) {
-   echo('
-    <header>
-        <div class="register">
-            <a href="index.php?page=login" class="menu">Log In</a>
-            <a href="index.php?page=register" class="menu">Sign up</a>
-        </div>
-        <h1 class="header">'. ucfirst($page) .'</h1>
-        
-        <ul class="list">
-        <div class="divh"><li class="menu"><a href="index.php?page=home" class="menu">HOME</a></li></div>
-        <div class="divh"><li class="menu"><a href="index.php?page=about"class="menu">ABOUT</a></li></div>
-        <div class="divh"><li class="menu"><a href="index.php?page=contact"class="menu">CONTACT</a></li></div>
-    </ul>
-    </header>
-   ');
-}
 
 
 function showContent($page) {
