@@ -7,6 +7,7 @@ require_once("home.php");
 require_once("about.php");
 require_once("contact.php");
 require_once("register.php");
+require_once("login.php");
 $page = getRequestedPage();
 showResponsePage($page);
 ##############################################################
@@ -69,6 +70,7 @@ function showHeader($page) {
    echo('
     <header>
         <div class="register">
+            <a href="index.php?page=login" class="menu">Log In</a>
             <a href="index.php?page=register" class="menu">Sign up</a>
         </div>
         <h1 class="header">'. ucfirst($page) .'</h1>
@@ -97,6 +99,9 @@ function showContent($page) {
             break;
         case "register":
             showRegisterContent();
+            break;
+        case "login":
+            showLoginContent();
             break;
         default:
             showPageError();
