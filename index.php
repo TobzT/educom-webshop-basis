@@ -4,12 +4,13 @@
 #MAIN APP                                                    #
 ##############################################################
 require_once("./1 Presentation/show.php");
+require_once("./2 Business/business.php");
+require_once("./3 Data/data.php");
 
+session_start();
 $page = getRequestedPage();
-showResponsePage($page);
-##############################################################
-#FUNCTIONS                                                   #
-##############################################################
+$data = processRequest($page);
+showResponsePage($data);
 
 function getRequestedPage() {
     $request_type = $_SERVER["REQUEST_METHOD"];
@@ -19,66 +20,40 @@ function getRequestedPage() {
         return getVarFromArray($_POST, 'page');
     }
 }
-function getVarFromArray($array, $key, $default = 'home') {
-    return isset($array[$key]) ? $array[$key] : $default;
+
+function processRequest($page){
+    switch($page){
+        case 'home':
+            //TODO
+        case 'about':
+            //TODO
+        case 'contact':
+            $data = getContactData();
+            validateContactForm($data);
+            if($data['valid'] == true){
+                $page = 'thanks';
+            }
+            break;
+        case 'login':
+            //TODO
+        case 'logout':
+            //TODO
+        case 'register':
+            $data = getRegisterData();
+            if($data['valid']) {
+                $page = 'login';
+            }
+            break;
+        
+        
+    }
+    $data['page'] = $page;
+    return $data;
 }
 
-
-function showResponsePage($page) {
+function showResponsePage($data) {
     beginDocument();
     showHead();
-    showBody($page);
+    showBody($data);
     endDocument();
-    
-}
-
-
-
-
-function showContent($page) {
-    
-    switch($page) {
-        case "home":
-            showHomeContent();
-            break;
-        case "about":
-            showAboutContent();
-            break;
-        case "contact":
-            showContactContent();
-            break;
-        case "register":
-            showRegisterContent();
-            break;
-        case "login":
-            showLoginContent();
-            break;
-        default:
-            showPageError();
-    }
-}
-
-function showPageError() {
-    echo('
-        <h1 class="error">PAGE ERROR</h1>
-    ');
-}
-
-function showFooter() {
-    echo('
-    <footer>
-        &#169;
-        <p>' . date("Y") . '</p>
-        <p>Tobias The</p>
-    </footer>
-    ');
-}
-
-function endDocument() {
-    echo('</html>');
-}
-
-
-function linkExternalCss() {
-    echo('<link rel="stylesheet" href="css.css">');
 }

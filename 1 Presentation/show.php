@@ -1,5 +1,6 @@
 <?php 
 require_once('./2 Business/business.php');
+
 //INDEX
 function beginDocument() {
     echo('
@@ -14,24 +15,24 @@ function showHead() {
     echo('</head>');
 }
 
-function showBody($page) {
+function showBody($data) {
     echo('<body> <div class="container">');
-    showHeader($page);
-    showContent($page);
+    showHeader($data);
+    showContent($data);
     showFooter();
     echo('</div> </body>');
     
 
 }
 
-function showHeader($page) {
+function showHeader($data) {
    echo('
     <header>
         <div class="register">
             <a href="index.php?page=login" class="menu">Log In</a>
             <a href="index.php?page=register" class="menu">Sign up</a>
         </div>
-        <h1 class="header">'. ucfirst($page) .'</h1>
+        <h1 class="header">'. ucfirst($data['page']) .'</h1>
         
         <ul class="list">
         <div class="divh"><li class="menu"><a href="index.php?page=home" class="menu">HOME</a></li></div>
@@ -42,11 +43,52 @@ function showHeader($page) {
    ');
 }
 
+
+
+function showContent($data) {
+    
+    switch($data['page']) {
+        case "home":
+            showHomeContent();
+            break;
+        case "about":
+            showAboutContent();
+            break;
+        case "contact":
+            showContactContent();
+            break;
+        case "register":
+            showRegisterContent();
+            break;
+        case "login":
+            showLoginContent();
+            break;
+        case 'thanks':
+            showContactThanks($data);
+            break;
+        default:
+            showPageError();
+    }
+}
+
+function endDocument() {
+    echo('</html>');
+}
+
+
+function linkExternalCss() {
+    echo('<link rel="stylesheet" href="css.css">');
+}
+
+
+
 //LOGIN
 function ShowLoginContent(){
+    $data = getLoginData();
+    
     showFormStart();
-    showFormItem("email", "email", "E-mail:", "", "");
-    showFormItem("pw", "password", "Password:", "", "");
+    showFormItem("email", "email", "E-mail:", $data['email'], $data['emailErr']);
+    showFormItem("pw", "password", "Password:", $data['pw'], $data['pwErr']);
     showFormEnd("login", "Log In");
 }
 
@@ -61,8 +103,7 @@ function showRegisterContent() {
     showFormItem("pw", "password", "Password:", $data["pw"], $data["pwErr"]);
     showFormItem("cpw", "password", "Confirm Password:", $data["cpw"], "");
     
-    showFormEnd($data["dest"], "Sign Up");
-    
+    showFormEnd('register', "Sign Up");
 }
 
 //HOME
@@ -101,7 +142,7 @@ function showAboutContent() {
 
 //CONTACT
 function showContactContent() {
-    $data = getdata();
+    $data = getContactData();
 
     // var_dump($data);
     if($data["valid"] == true) {
@@ -137,6 +178,21 @@ function ShowFormEnd($page, $submitText) {
     echo('<button>'.$submitText.'</button></form>');
 }
 
+function showPageError() {
+    echo('
+        <h1 class="error">PAGE ERROR</h1>
+    ');
+}
+
+function showFooter() {
+    echo('
+    <footer>
+        &#169;
+        <p>' . date("Y") . '</p>
+        <p>Tobias The</p>
+    </footer>
+    ');
+}
 
 
 ?>

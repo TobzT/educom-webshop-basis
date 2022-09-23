@@ -15,12 +15,63 @@ function getOptions() {
     return OPTIONS;
 }
 
-//LOGIN
 
+
+function getVarFromArray($array, $key, $default = 'home') {
+    return isset($array[$key]) ? $array[$key] : $default;
+}
+
+
+
+//LOGIN
+function getLoginData() {
+    $data = array("valid" => NULL, "pw" => NULL, "pwErr" => NULL, "email" => NULL, "emailErr" => NULL);
+    $request_type = $_SERVER["REQUEST_METHOD"];
+
+    if($request_type == "POST") {
+
+        $data = validateLogin();
+    }
+
+    return $data;
+}
+
+function validateLogin() {
+    $valid = true;
+    $email = getVarFromArray($_POST, 'email');
+    $pw = getVarFromArray($_POST, 'pw');
+    $data = findByEmail("./users/users.txt", $email);
+    $name = $data['name'];
+    
+    if(empty($data['email'])) {
+        $valid = false;
+        $emailErr = 'E-mail is not registered.';
+    } 
+
+    if(empty($pw)) {
+        $valid = false;
+        $pwErr = 'Please enter a password.';
+    } elseif ($data['pw'] !== $pw) {
+        $valid = false;
+        $pwErr = 'Password does not match';
+    }
+
+
+    return array('valid' => $valid, 'email' => $email, 'emailErr' => $emailErr ,'pw' => $pw, 'pwErr' => $pwErr, 'name' => $name);
+
+}
+
+function doLogIn() {
+    // TODO
+}
+
+function doLogOut() {
+    //TODO
+}
 
 //REGISTER
 function getRegisterData() {
-    $data = array("valid" => NULL, "name" => "", "nameErr" => "", "pw" => "", "cpw" => "", "pwErr" => "", "email" => "", "emailErr" => "", "dest" => "register");
+    $data = array("valid" => NULL, "name" => NULL, "nameErr" => NULL, "pw" => NULL, "cpw" => NULL, "pwErr" => NULL, "email" => NULL, "emailErr" => NULL);
     if($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $data = validateRegistration(".\users\users.txt");
@@ -28,16 +79,17 @@ function getRegisterData() {
     return $data;
 }
 
+
+
 function validateRegistration($filename) {
-    $nameErr = $pwErr = $emailErr =  "";
-    $dest = "register";
+    $nameErr = $pwErr = $emailErr = NULL;
     $valid = true;
     $name = test_inputs(getVarFromArray($_POST, "name"));
     $email = strtolower(test_inputs(getVarFromArray($_POST, "email")));
     $pw = test_inputs(getVarFromArray($_POST, "pw"));
     $cpw = test_inputs(getVarFromArray($_POST, "cpw"));
 
-    if(empty($name)){
+    if(empty($name)) {
         $valid = false;
         $nameErr = "Please enter your name.";
     }
@@ -57,7 +109,7 @@ function validateRegistration($filename) {
         $pwErr = "Passwords do not match";
     }
 
-    if (findEmailInFile($filename, $email)) {
+    if (findByEmailB($filename, $email)) {
         $valid = false;
         $emailErr = "E-mail found in database";
     }
@@ -66,12 +118,14 @@ function validateRegistration($filename) {
     if ($valid) {
         $message = $email . "|" . $name . "|" . $pw;
         saveInDb($filename, $message);
-        $dest = "login";
+        
     }
     
-    return array("valid" => $valid, "name" => $name, "nameErr" => $nameErr, "pw" => $pw, "cpw" => $cpw, "pwErr" => $pwErr, "email" => $email, "emailErr" => $emailErr, "dest" => $dest);
+    return array("valid" => $valid, "name" => $name, "nameErr" => $nameErr, "pw" => $pw, "cpw" => $cpw, "pwErr" => $pwErr, "email" => $email, "emailErr" => $emailErr);
 
 }
+
+
 
 //HOME
 
@@ -159,7 +213,7 @@ function repeatingForm($options, $value) {
 }
 
 function repeatingRadio($key, $options) {
-    $data = getData();
+    $data = getContactData();
     $count = count($options);
     $keys = array_keys($options);
     
@@ -177,54 +231,52 @@ function radioCheck($options, $keys, $i, $data) {
     return ($data['pref'] == $options[$keys[$i]]) ? "checked" : "";
 }
 
-function validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text) {
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+function validateContactForm($data) {
+    $request_type = $_SERVER["REQUEST_METHOD"];
+    if($request_type == "POST") {
         
-        $valid = true;
-        $gender = test_inputs(getVarFromArray($_POST, "gender"));
+        $data['valid'] = true;
+        $data['gender'] = test_inputs(getVarFromArray($_POST, "gender"));
         
         if(empty(test_inputs(getVarFromArray($_POST, "name")))) {
-            $nameErr = "Je moet je naam invullen.";
-            $valid = false;
+            $data['nameErr'] = "Je moet je naam invullen.";
+            $data['valid'] = false;
         } else {
-            $name = test_inputs(getVarFromArray($_POST, "name"));
+            $data['name'] = test_inputs(getVarFromArray($_POST, "name"));
         }
 
 
         if(empty(test_inputs(getVarFromArray($_POST, "email")))) {
-            $emailErr = "Je moet je e-mail adres invullen.";
-            $valid = false;
+            $data['emailErr'] = "Je moet je e-mail adres invullen.";
+            $data['valid'] = false;
         } else {
-            $email = test_inputs(getVarFromArray($_POST, "email"));
+            $data['email'] = test_inputs(getVarFromArray($_POST, "email"));
         }
 
         if(empty(test_inputs(getVarFromArray($_POST, "tlf")))) {
-            $tlfErr = "Je moet je telefoonnummer invullen.";
-            $valid = false;
+            $data['tlfErr'] = "Je moet je telefoonnummer invullen.";
+            $data['valid'] = false;
         } else {
-            $tlf = test_inputs(getVarFromArray($_POST, "tlf"));
+            $data['tlf'] = test_inputs(getVarFromArray($_POST, "tlf"));
         }
 
         if(empty(getVarFromArray($_POST, "pref"))) {
-            $prefErr = "Je moet een voorkeur kiezen.";
-            $valid = false;
+            $data['prefErr'] = "Je moet een voorkeur kiezen.";
+            $data['valid'] = false;
         } else {
-            $pref = test_inputs(getVarFromArray($_POST, "pref"));
+            $data['pref'] = test_inputs(getVarFromArray($_POST, "pref"));
         }
 
-        $text = test_inputs(getVarFromArray($_POST, "Text1"));
+        $data['text'] = test_inputs(getVarFromArray($_POST, "Text1"));
     }
-    return array("valid" => $valid, "gender" => $gender, "name" => $name, "nameErr" => $nameErr,
-                     "email" => $email, "emailErr" => $emailErr, "tlf" => $tlf, "tlfErr" => $tlfErr,
-                     "pref" => $pref, "prefErr" => $prefErr, "text" => $text
-                    );
+    return $data;
 }
 
-function getData() {
-    $nameErr = $emailErr = $tlfErr = $prefErr = "";
-    $name = $email = $gender = $text = $pref = $tlf = "";
-    $valid = false;
+function getContactData() {
+    $data = array('valid' => NULL, 'gender' => NULL, 'name' => NULL, 'nameErr' => NULL, 'email' => NULL, 'emailErr' => NULL, 'tlf' => NULL, 'tlfErr' => NULL, 'pref' => NULL, 'prefErr' => NULL, 'text' => NULL);
     
-    return validateContactForm($valid, $gender, $name, $nameErr, $email, $emailErr, $tlf, $tlfErr, $pref, $prefErr, $text);
+    return validateContactForm($data);
 }
 ?>
