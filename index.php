@@ -8,6 +8,7 @@ require_once("./2 Business/business.php");
 require_once("./3 Data/data.php");
 
 session_start();
+var_dump($_SESSION);
 $page = getRequestedPage();
 $data = processRequest($page);
 showResponsePage($data);
@@ -15,9 +16,9 @@ showResponsePage($data);
 function getRequestedPage() {
     $request_type = $_SERVER["REQUEST_METHOD"];
     if ($request_type == "GET") {
-        return getVarFromArray($_GET, 'page');
+        return getVarFromArray($_GET, 'page', 'home');
     } else {
-        return getVarFromArray($_POST, 'page');
+        return getVarFromArray($_POST, 'page', 'home');
     }
 }
 
@@ -29,15 +30,22 @@ function processRequest($page){
             //TODO
         case 'contact':
             $data = getContactData();
-            validateContactForm($data);
             if($data['valid'] == true){
                 $page = 'thanks';
             }
             break;
         case 'login':
-            //TODO
+            $data = getLoginData();
+            var_dump($data);
+            
+            if($data['valid'] == true) {
+                doLogin($data);
+                $page = 'home';
+            }
+
         case 'logout':
-            //TODO
+            doLogout();
+            $page = 'home';
         case 'register':
             $data = getRegisterData();
             if($data['valid']) {

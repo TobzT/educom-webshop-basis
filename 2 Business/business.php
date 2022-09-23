@@ -17,7 +17,7 @@ function getOptions() {
 
 
 
-function getVarFromArray($array, $key, $default = 'home') {
+function getVarFromArray($array, $key, $default = NULL) {
     return isset($array[$key]) ? $array[$key] : $default;
 }
 
@@ -25,23 +25,26 @@ function getVarFromArray($array, $key, $default = 'home') {
 
 //LOGIN
 function getLoginData() {
-    $data = array("valid" => NULL, "pw" => NULL, "pwErr" => NULL, "email" => NULL, "emailErr" => NULL);
+    $data = array("valid" => false, "pw" => NULL, "pwErr" => NULL, "email" => NULL, "emailErr" => NULL, 'name' => NULL);
     $request_type = $_SERVER["REQUEST_METHOD"];
 
     if($request_type == "POST") {
 
-        $data = validateLogin();
+        $data = validateLogin(".\users\users.txt");
+        
     }
-
     return $data;
 }
 
-function validateLogin() {
+function validateLogin($filename) {
+    $emailErr = $pwErr = $name = "";
     $valid = true;
-    $email = getVarFromArray($_POST, 'email');
-    $pw = getVarFromArray($_POST, 'pw');
-    $data = findByEmail("./users/users.txt", $email);
-    $name = $data['name'];
+    $email = test_inputs(getVarFromArray($_POST, 'email'));
+    $pw = test_inputs(getVarFromArray($_POST, 'pw'));
+    $data = findByEmail($filename, $email);
+    if(!empty($data['name'])){
+        $name = $data['name'];
+    }
     
     if(empty($data['email'])) {
         $valid = false;
@@ -51,7 +54,7 @@ function validateLogin() {
     if(empty($pw)) {
         $valid = false;
         $pwErr = 'Please enter a password.';
-    } elseif ($data['pw'] !== $pw) {
+    } elseif (test_inputs($data['pw']) !== $pw) {
         $valid = false;
         $pwErr = 'Password does not match';
     }
@@ -61,17 +64,20 @@ function validateLogin() {
 
 }
 
-function doLogIn() {
-    // TODO
+function doLogIn($data) {
+    
+    $_SESSION['username'] = $data['name'];
+    $_SESSION['loggedin'] = true;
 }
 
 function doLogOut() {
-    //TODO
+    $_SESSION['username'] = NULL;
+    $_SESSION['loggedin'] = false;
 }
 
 //REGISTER
 function getRegisterData() {
-    $data = array("valid" => NULL, "name" => NULL, "nameErr" => NULL, "pw" => NULL, "cpw" => NULL, "pwErr" => NULL, "email" => NULL, "emailErr" => NULL);
+    $data = array("valid" => NULL, "name" => NULL, "nameErr" => NULL, "pw" => NULL, "cpw" => NULL, "pwErr" => "", "email" => NULL, "emailErr" => "");
     if($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $data = validateRegistration(".\users\users.txt");

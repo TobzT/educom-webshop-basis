@@ -26,12 +26,23 @@ function showBody($data) {
 }
 
 function showHeader($data) {
-   echo('
-    <header>
+    if($_SESSION['loggedin'] == true) {
+        $register = '
+        <div class="register">
+            <a href="index.php?page=logout" class="menu">Log Out ' . ucfirst($_SESSION['username']) . '</a>
+        </div>
+        ';
+    } else {
+        $register = '
         <div class="register">
             <a href="index.php?page=login" class="menu">Log In</a>
             <a href="index.php?page=register" class="menu">Sign up</a>
         </div>
+        ';
+    }
+   echo('
+    <header>
+        '.$register.'
         <h1 class="header">'. ucfirst($data['page']) .'</h1>
         
         <ul class="list">
@@ -61,11 +72,13 @@ function showContent($data) {
             showRegisterContent();
             break;
         case "login":
-            showLoginContent();
+            showLoginContent($data);
             break;
         case 'thanks':
             showContactThanks($data);
             break;
+        case 'logout':
+            showHomeContent();
         default:
             showPageError();
     }
@@ -83,7 +96,7 @@ function linkExternalCss() {
 
 
 //LOGIN
-function ShowLoginContent(){
+function ShowLoginContent($data){
     $data = getLoginData();
     
     showFormStart();
