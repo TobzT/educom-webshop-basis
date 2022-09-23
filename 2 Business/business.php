@@ -25,7 +25,7 @@ function getVarFromArray($array, $key, $default = NULL) {
 
 //LOGIN
 function getLoginData() {
-    $data = array("valid" => false, "pw" => NULL, "pwErr" => NULL, "email" => NULL, "emailErr" => NULL, 'name' => NULL);
+    $data = array("valid" => false, "pw" => "", "pwErr" => "", "email" => "", "emailErr" => "", 'name' => "");
     $request_type = $_SERVER["REQUEST_METHOD"];
 
     if($request_type == "POST") {
@@ -39,25 +39,26 @@ function getLoginData() {
 function validateLogin($filename) {
     $emailErr = $pwErr = $name = "";
     $valid = true;
-    $email = test_inputs(getVarFromArray($_POST, 'email'));
+    $email = test_inputs(strtolower(getVarFromArray($_POST, 'email')));
     $pw = test_inputs(getVarFromArray($_POST, 'pw'));
     $data = findByEmail($filename, $email);
-    if(!empty($data['name'])){
-        $name = $data['name'];
-    }
+    if(!empty($data)) {
+        if(!empty($data['name'])){
+            $name = $data['name'];
+        }
     
-    if(empty($data['email'])) {
+        if(empty($pw)) {
+            $valid = false;
+            $pwErr = 'Please enter a password.';
+        } elseif (test_inputs($data['pw']) !== $pw) {
+            $valid = false;
+            $pwErr = 'Password does not match';
+        }
+    } else {
         $valid = false;
         $emailErr = 'E-mail is not registered.';
-    } 
-
-    if(empty($pw)) {
-        $valid = false;
-        $pwErr = 'Please enter a password.';
-    } elseif (test_inputs($data['pw']) !== $pw) {
-        $valid = false;
-        $pwErr = 'Password does not match';
     }
+    
 
 
     return array('valid' => $valid, 'email' => $email, 'emailErr' => $emailErr ,'pw' => $pw, 'pwErr' => $pwErr, 'name' => $name);
@@ -141,9 +142,12 @@ function validateRegistration($filename) {
 
 //CONTACT
 function test_inputs($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
+    if(!empty($data)){
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+    }
+    
     return $data;
 }
 
