@@ -13,7 +13,7 @@ function myWriteFile($filename, $message) {
     fclose($file);
 }
 
-function findEmailInFile($filename, $string) {
+function findEmailInFileB($filename, $string) {
     $file = fopen($filename, "r");
     $result = false;
     fgets($file);
@@ -31,6 +31,21 @@ function findEmailInFile($filename, $string) {
     return $result;
 }
 
+function findEmailInFile($filename, $string) {
+    $file = fopen($filename, "r");
+    $result = NULL;
+    fgets($file);
+    while(($line = fgets($file)) !== false) {
+        $line = explode("|", $line);
+        if($line[0] == $string) {
+            $result = array('email' => $line[0], 'name' => $line[1], 'pw' => $line[2]);
+            break;
+        }
+    }
+    fclose($file);
+    return $result;
+}
+
 function session_test(){
     session_start();
 
@@ -41,8 +56,9 @@ function session_test(){
 
 // myWriteFile("users.txt", "TEST|TEST|TEST");
 // myReadFile("users.txt");
-// findEmailInFile("users.txt", "Tobias@conceptuals.nl");
-// findEmailInFile("users.txt", "TEST");
-session_test();
+// findEmailInFileB("users.txt", "Tobias@conceptuals.nl");
+// findEmailInFileB("users.txt", "TEST");
+// session_test();
+findEmailInFile("users.txt", "niks@niemand.nl");
 
 ?>
