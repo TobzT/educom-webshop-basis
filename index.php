@@ -42,10 +42,12 @@ function processRequest($page){
                 doLogin($data);
                 $page = 'home';
             }
+            break;
 
         case 'logout':
             doLogout();
             $page = 'home';
+            break;
         case 'register':
             $data = getRegisterData();
             if($data['valid']) {
