@@ -45,6 +45,8 @@ function findEmailInFile($filename, $string) {
     fclose($file);
     return $result;
 }
+$data = findEmailInFile("users.txt", "balls@mogus.nl");
+var_dump($data);
 
 function session_test(){
     session_start();
