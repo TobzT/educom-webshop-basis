@@ -8,7 +8,7 @@ require_once("./2 Business/business.php");
 require_once("./3 Data/data.php");
 
 session_start();
-var_dump($_SESSION);
+// var_dump($_SESSION);
 $page = getRequestedPage();
 $data = processRequest($page);
 showResponsePage($data);
@@ -36,7 +36,7 @@ function processRequest($page){
             break;
         case 'login':
             $data = getLoginData();
-            var_dump($data);
+            // var_dump($data);
             
             if($data['valid'] == true) {
                 doLogin($data);
