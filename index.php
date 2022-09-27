@@ -29,13 +29,14 @@ function processRequest($page){
         case 'about':
             //TODO
         case 'contact':
-            $data = getContactData();
+            $data = getData('contact');
+            $data = validateForm($data);
             if($data['valid'] == true){
                 $page = 'thanks';
             }
             break;
         case 'login':
-            $data = getLoginData();
+            $data = getData('login');
             // var_dump($data);
             
             if($data['valid'] == true) {
@@ -49,7 +50,7 @@ function processRequest($page){
             $page = 'home';
             break;
         case 'register':
-            $data = getRegisterData();
+            $data = getData('register');
             if($data['valid']) {
                 $page = 'login';
             }

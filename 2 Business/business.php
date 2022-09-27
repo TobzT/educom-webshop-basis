@@ -2,17 +2,14 @@
 require_once('./3 Data/data.php');
 
 function getGenders() {
-    define("GENDERS", array("male" => "Dhr",
-                        "female" => "Mvr",
-                        "other" => "Anders"));
-    return GENDERS;
+    return array("male" => "Dhr",
+                "female" => "Mvr",
+                "other" => "Anders");
 }
 
 function getOptions() {
-    define("OPTIONS", array("tlf" => "Telefoon",
-                        "email" => "E-mail"
-                        ));
-    return OPTIONS;
+    return array("tlf" => "Telefoon",
+                "email" => "E-mail");
 }
 
 
@@ -20,22 +17,137 @@ function getOptions() {
 function getVarFromArray($array, $key, $default = NULL) {
     return isset($array[$key]) ? $array[$key] : $default;
 }
+//DATA
+function getData($page) {
+    $data = array('page' => $page, "valid" => NULL, 'errors' => array(), 'values' => array());
+    $data['meta'] = getMetaData($page);
+    switch($page) {
+        case 'register':
+            
+            // if($_SERVER['REQUEST_METHOD'] == "POST") {
+            //     $data = validateRegistration(".\users\users.txt");
+            // }
+            return $data;
 
+        case 'contact':
+            if($_SERVER['REQUEST_METHOD'] == "POST") {
+                $data = validateForm($data);
+            }
 
+            return $data;
+            
+        case 'login':
+            // print_r($data['meta']);
 
-//LOGIN
-function getLoginData() {
-    $data = array("valid" => false, "pw" => "", "pwErr" => "", "email" => "", "emailErr" => "", 'name' => "");
-    $request_type = $_SERVER["REQUEST_METHOD"];
+            // if($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    if($request_type == "POST") {
-
-        $data = validateLogin(".\users\users.txt");
-        
+            //     $data = validateLogin(".\users\users.txt");
+                
+            // }
+            return $data;
     }
+}
+
+function getMetaData($page) {
+    switch($page) {
+        case 'login':
+            return array(
+                'email' => array('label' => 'E-mail: ', 'type' => 'email', 'validations' => array('validEmail')),
+                'pw' => array('label' => 'Password: ', 'type' => 'password', 'validations' => array('correctPassword'))
+            );
+    
+        case 'register':
+            return array(
+                'name' => array('label' => 'Name: ', 'type' => 'text', 'validations' => array('onlyLetters')),
+                'email' => array('label' => 'E-mail: ', 'type' => 'email', 'validations' => array('validEmail', 'notDuplicateMail')),
+                'pw' => array('label' => 'Password', 'type' => 'password', 'validations' => array('notEmpty', 'validPassword')),
+                'cpw' => array('label' => 'Confim Password', 'type' => 'password', 'validations' => array('equalField:pw'))
+            );
+
+        case 'contact':
+            return array(
+                'gender' => array('label' => 'Aanspreeksvorm: ', 'type' => 'dropdown', 'options' => getGenders(), 'validations' => array('notEmpty')),
+                'name' => array('label' => 'Name: ', 'type' => 'text', 'validations' => array('onlyLetters')),
+                'email' => array('label' => 'E-mail', 'type' => 'email', 'validations' => array('validEmail')),
+                'tlf' => array('label' => 'Telefoon: ', 'type' => 'number', 'validations' => array('justNumbers')),
+                'radio' => array('label' => 'Communicatievoorkeur: ', 'type' => 'radio', 'options' => getOptions(), 'validations' => array('notEmpty')),
+                'Text1' => array('label' => '', 'type' => 'textarea', 'validations' => array())
+            );
+    }
+}
+
+function validateForm($data) {
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $data['valid'] = true;
+        // var_dump($data['meta']);
+        // print_r($data['meta']);
+        foreach($data['meta'] as $key => $metaArray) {
+            // var_dump($metaArray);
+            $data['values'][$key] = test_inputs(getVarFromArray($_POST, $key));
+            $data = validateField($data, $key, $metaArray);
+        }
+    }
+    // var_dump($data['values']);
+
     return $data;
 }
 
+function validateField($data, $key, $metaArray) {
+    if(!empty($data['meta'][$key]['validations'])){
+        foreach($data['meta'][$key]['validations'] as $validation) {
+            switch($validation) {
+                case 'notEmpty':
+                    if(empty($data['values'][$key])) {
+                        $data['valid'] = false;
+                        $data['errors'][$key] = 'TODO cannot be empty.';
+                    }
+            }
+        }
+    }
+    
+    return $data;
+}
+
+function validateContactForm($data) {
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+        $data['valid'] = true;
+        $data['gender'] = test_inputs(getVarFromArray($_POST, "gender"));
+        
+        if(empty(test_inputs(getVarFromArray($_POST, "name")))) {
+            $data['nameErr'] = "Je moet je naam invullen.";
+            $data['valid'] = false;
+        } else {
+            $data['name'] = test_inputs(getVarFromArray($_POST, "name"));
+        }
+
+
+        if(empty(test_inputs(getVarFromArray($_POST, "email")))) {
+            $data['emailErr'] = "Je moet je e-mail adres invullen.";
+            $data['valid'] = false;
+        } else {
+            $data['email'] = test_inputs(getVarFromArray($_POST, "email"));
+        }
+
+        if(empty(test_inputs(getVarFromArray($_POST, "tlf")))) {
+            $data['tlfErr'] = "Je moet je telefoonnummer invullen.";
+            $data['valid'] = false;
+        } else {
+            $data['tlf'] = test_inputs(getVarFromArray($_POST, "tlf"));
+        }
+
+        if(empty(getVarFromArray($_POST, "pref"))) {
+            $data['prefErr'] = "Je moet een voorkeur kiezen.";
+            $data['valid'] = false;
+        } else {
+            $data['pref'] = test_inputs(getVarFromArray($_POST, "pref"));
+        }
+
+        $data['text'] = test_inputs(getVarFromArray($_POST, "Text1"));
+    }
+    return $data;
+}
+//LOGIN
 function validateLogin($filename) {
     $emailErr = $pwErr = $name = "";
     $valid = true;
@@ -59,8 +171,6 @@ function validateLogin($filename) {
         $emailErr = 'E-mail is not registered.';
     }
     
-
-
     return array('valid' => $valid, 'email' => $email, 'emailErr' => $emailErr ,'pw' => $pw, 'pwErr' => $pwErr, 'name' => $name);
 
 }
@@ -77,14 +187,7 @@ function doLogOut() {
 }
 
 //REGISTER
-function getRegisterData() {
-    $data = array("valid" => NULL, "name" => NULL, "nameErr" => NULL, "pw" => NULL, "cpw" => NULL, "pwErr" => "", "email" => NULL, "emailErr" => "");
-    if($_SERVER['REQUEST_METHOD'] == "POST") {
 
-        $data = validateRegistration(".\users\users.txt");
-    }
-    return $data;
-}
 
 
 
@@ -151,20 +254,71 @@ function test_inputs($data) {
     return $data;
 }
 
-function showGenericForm($page, $data) {
-    
-    $GENDERS = getGenders();
-    $OPTIONS = getOptions();
-    showFormStart();
-    
-    showFormItem("gender", "dropdown", "Gender:", $data["gender"], "", $GENDERS);
-    showFormItem("name", "text", "Name:", $data["name"], $data["nameErr"]);
-    showFormItem("email", "email", "E-mail adres:", $data["email"], $data["emailErr"]);
-    showFormItem("tlf", "text", "Telefoonnummer: ", $data["tlf"], $data["tlfErr"]);
-    showFormItem("pref", "radio", "Communicatievoorkeur: ", $data["pref"], $data["prefErr"], $OPTIONS);
-    showFormItem("text", "textarea", "", $data["text"], "");
 
-    showFormEnd($page, "Submit");
+
+
+function showMetaForm($data, $text) {
+
+    showFormStart();
+    // var_dump($data);
+    foreach($data['meta'] as $meta){
+        $key = key($meta);
+        showMetaFormItem($key, $data, $meta);
+    }
+    showFormEnd($data['page'], $text);
+}
+
+function showMetaFormItem($key, $data, $meta) {
+    echo('<div>
+        <label for="'.$key.'">'.$meta['label'].'</label>'
+    );
+
+    if(empty($data['values'][$key])) {
+        $data['values'][$key] = '';
+    }
+
+    if(empty($data['errors'][$key])) {
+        $data['errors'][$key] = '';
+    }
+
+    switch ($meta['type']) {
+        case "dropdown":
+            echo('
+                    <select name="'.$key.'" id="'.$key.'" >');
+
+            echo(repeatingForm($meta['options'], $data['values'][$key]));
+
+            echo('</select>');
+            break;
+        
+        case "radio":
+            echo('
+                <p><h3 class="error"> '. $data['errors'][$key] .'</h3></p>
+            ');
+
+            echo(repeatingRadio($meta['options'], $data['values'][$key], $key));
+
+            break;
+        
+        case "textarea":
+            echo('
+                
+                <textarea class=input name="'.$key.'" cols="40" rows="10"></textarea>
+
+                
+            ');
+            break;
+        
+        default:
+            echo('
+                    <input class="input" type="'.$meta['type'].'" id="'.$key.'" name="'.$key.'" value="'. $data['values'][$key] .'">
+                    
+                    <h3 class="error">'.$data['errors'][$key] .'</h3>
+                
+            ');
+            break;
+    }
+    echo('</div><br>');
 }
 
 function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
@@ -178,7 +332,7 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
             echo('
                     <select name="'.$key.'" id="'.$key.'" >');
 
-            echo(repeatingForm($options, $value));
+            echo(repeatingForm($data, $key));
 
             echo('</select>');
             break;
@@ -188,7 +342,7 @@ function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
                 <p><h3 class="error"> '. $error .'</h3></p>
             ');
 
-            echo(repeatingRadio($key, $options));
+            echo(repeatingRadio($data, $key));
 
             break;
         
@@ -222,71 +376,25 @@ function repeatingForm($options, $value) {
     }
 }
 
-function repeatingRadio($key, $options) {
-    $data = getContactData();
+function repeatingRadio($options, $value, $key) {
     $count = count($options);
     $keys = array_keys($options);
-    
-    for($i = 0; $i < $count; $i++) {
-        $checked = radioCheck($options, $keys, $i, $data);
+    for ($i = 0; $i < $count; $i++) {
         echo('
-            <input type="radio" id="" name="'.$key.'" value="'.$options[$keys[$i]].'"'.$checked.'>
-            <label for="'.$key.'">'.$options[$keys[$i]].'</label><br>
+            <input type="radio" name="'.$key.'" id="'.$keys[$i].'"value="'.$keys[$i].'"'.(($value == $keys[$i]) ? "checked" : "").'></option>
+            <label for="'.$keys[$i].'">'.$options[$keys[$i]].'</label><br>
         ');
     }
     
 }
 
-function radioCheck($options, $keys, $i, $data) {
-    return ($data['pref'] == $options[$keys[$i]]) ? "checked" : "";
+function radioCheck($data, $key, $option) {
+    return ($data['values'][$key] == $option) ? "checked" : "";
 }
 
 
 
-function validateContactForm($data) {
-    $request_type = $_SERVER["REQUEST_METHOD"];
-    if($request_type == "POST") {
-        
-        $data['valid'] = true;
-        $data['gender'] = test_inputs(getVarFromArray($_POST, "gender"));
-        
-        if(empty(test_inputs(getVarFromArray($_POST, "name")))) {
-            $data['nameErr'] = "Je moet je naam invullen.";
-            $data['valid'] = false;
-        } else {
-            $data['name'] = test_inputs(getVarFromArray($_POST, "name"));
-        }
 
 
-        if(empty(test_inputs(getVarFromArray($_POST, "email")))) {
-            $data['emailErr'] = "Je moet je e-mail adres invullen.";
-            $data['valid'] = false;
-        } else {
-            $data['email'] = test_inputs(getVarFromArray($_POST, "email"));
-        }
 
-        if(empty(test_inputs(getVarFromArray($_POST, "tlf")))) {
-            $data['tlfErr'] = "Je moet je telefoonnummer invullen.";
-            $data['valid'] = false;
-        } else {
-            $data['tlf'] = test_inputs(getVarFromArray($_POST, "tlf"));
-        }
-
-        if(empty(getVarFromArray($_POST, "pref"))) {
-            $data['prefErr'] = "Je moet een voorkeur kiezen.";
-            $data['valid'] = false;
-        } else {
-            $data['pref'] = test_inputs(getVarFromArray($_POST, "pref"));
-        }
-
-        $data['text'] = test_inputs(getVarFromArray($_POST, "Text1"));
-    }
-    return $data;
-}
-
-function getContactData() {
-    $data = array('valid' => NULL, 'gender' => NULL, 'name' => NULL, 'nameErr' => NULL, 'email' => NULL, 'emailErr' => NULL, 'tlf' => NULL, 'tlfErr' => NULL, 'pref' => NULL, 'prefErr' => NULL, 'text' => NULL);
-    
-    return validateContactForm($data);
-}
 ?>

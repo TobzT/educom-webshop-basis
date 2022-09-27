@@ -97,26 +97,22 @@ function linkExternalCss() {
 
 //LOGIN
 function ShowLoginContent($data){
-    $data = getLoginData();
+    $data = getData('login');
     
-    showFormStart();
-    showFormItem("email", "email", "E-mail:", $data['email'], $data['emailErr']);
-    showFormItem("pw", "password", "Password:", $data['pw'], $data['pwErr']);
-    showFormEnd("login", "Log In");
+    showMetaForm($data, "Log in");
 }
 
 //REGISTER
 function showRegisterContent() {
-    $data = getRegisterData();
+    $data = getData('register');
     
-    showFormStart();
 
-    showFormItem("name", "text", "Naam:", $data["name"], $data["nameErr"]);
-    showFormItem("email", "email", "E-mail:", $data["email"], $data["emailErr"]);
-    showFormItem("pw", "password", "Password:", $data["pw"], $data["pwErr"]);
-    showFormItem("cpw", "password", "Confirm Password:", $data["cpw"], "");
+    showMetaForm($data, "Sign up");
+    // showFormItem("name", "text", "Naam:", $data["name"], $data["nameErr"]);
+    // showFormItem("email", "email", "E-mail:", $data["email"], $data["emailErr"]);
+    // showFormItem("pw", "password", "Password:", $data["pw"], $data["pwErr"]);
+    // showFormItem("cpw", "password", "Confirm Password:", $data["cpw"], "");
     
-    showFormEnd('register', "Sign Up");
 }
 
 //HOME
@@ -155,14 +151,16 @@ function showAboutContent() {
 
 //CONTACT
 function showContactContent() {
-    $data = getContactData();
+    $data = getData('contact');
 
     // var_dump($data);
     if($data["valid"] == true) {
         showContactThanks($data);
         
     } else {
-        showGenericForm("contact", $data);
+        // showGenericForm("contact", $data);
+        
+        showMetaForm($data, "Submit");
     }
 }
 
