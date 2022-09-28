@@ -168,13 +168,13 @@ function showContactThanks($data) {
     $GENDERS = getGenders();
     echo(
         '<p class="body">
-            Dankjewel ' . $GENDERS[$data['gender']] . " " . ucfirst($data["name"]) . '! <br> <br>
+            Dankjewel ' . $GENDERS[$data['values']['gender']] . " " . ucfirst($data['values']['name']) . '! <br> <br>
 
-            Jouw e-mail adres is ' . $data["email"] . '. <br>
-            Jouw telefoonnummer is ' . $data["tlf"] . '. <br>
-            Jouw voorkeur is ' . $data["pref"] . '. <br> <br>
+            Jouw e-mail adres is ' . $data['values']["email"] . '. <br>
+            Jouw telefoonnummer is ' . $data['values']["tlf"] . '. <br>
+            Jouw voorkeur is ' . $data['values']["radio"] . '. <br> <br>
             
-            ' . $data["text"] . '
+            ' . $data['values']["text"] . '
         </p>
         '
     );

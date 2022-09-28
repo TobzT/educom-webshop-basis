@@ -53,7 +53,7 @@ function getMetaData($page) {
         case 'login':
             return array(
                 'email' => array('label' => 'E-mail: ', 'type' => 'email', 'validations' => array('validEmail')),
-                'pw' => array('label' => 'Password: ', 'type' => 'password', 'validations' => array('correctPassword'))
+                'pw' => array('label' => 'Password: ', 'type' => 'password', 'validations' => array('validPassword'))
             );
     
         case 'register':
@@ -67,11 +67,11 @@ function getMetaData($page) {
         case 'contact':
             return array(
                 'gender' => array('label' => 'Aanspreeksvorm: ', 'type' => 'dropdown', 'options' => getGenders(), 'validations' => array('notEmpty')),
-                'name' => array('label' => 'Name: ', 'type' => 'text', 'validations' => array('onlyLetters')),
-                'email' => array('label' => 'E-mail', 'type' => 'email', 'validations' => array('validEmail')),
-                'tlf' => array('label' => 'Telefoon: ', 'type' => 'number', 'validations' => array('justNumbers')),
+                'name' => array('label' => 'Name: ', 'type' => 'text', 'validations' => array('onlyLetters', 'notEmpty')),
+                'email' => array('label' => 'E-mail', 'type' => 'email', 'validations' => array('validEmail', 'notEmpty')),
+                'tlf' => array('label' => 'Telefoon: ', 'type' => 'number', 'validations' => array('onlyNumbers', 'notEmpty')),
                 'radio' => array('label' => 'Communicatievoorkeur: ', 'type' => 'radio', 'options' => getOptions(), 'validations' => array('notEmpty')),
-                'Text1' => array('label' => '', 'type' => 'textarea', 'validations' => array())
+                'text' => array('label' => '', 'type' => 'textarea', 'validations' => array())
             );
     }
 }
@@ -81,7 +81,7 @@ function validateForm($data) {
         $data['valid'] = true;
         // var_dump($data['meta']);
         // print_r($data['meta']);
-        var_dump($_POST);
+        // var_dump($_POST);
         foreach($data['meta'] as $key => $metaArray) {
             // var_dump($metaArray);
             
@@ -96,13 +96,35 @@ function validateForm($data) {
 
 function validateField($data, $key, $metaArray) {
     if(!empty($data['meta'][$key]['validations'])){
+        $value = $data['values'][$key];
         foreach($data['meta'][$key]['validations'] as $validation) {
-            switch($validation) {
+            switch($validation) { 
                 case 'notEmpty':
-                    if(empty($data['values'][$key])) {
+                    if(empty($value)) {
                         $data['valid'] = false;
-                        $data['errors'][$key] = 'TODO cannot be empty.';
+                        $fieldName = explode(':', $data['meta'][$key]['label'])[0];
+                        $data['errors'][$key] = $fieldName .' mag niet leeg zijn.';
                     }
+                    return $data;
+                case 'validEmail':
+                    
+                    if(!str_contains($value, '@') Or !str_contains($value, '.')) {
+                        $data['valid'] = false;
+                        $data['errors'][$key] = 'Dit is geen E-mail adres.';
+                    }
+                    return $data;
+                case 'onlyNumbers':
+                    if(!is_numeric($value)) {
+                        $data['valid'] = false;
+                        $data['errors'][$key] = 'Voer alleen cijfers in.';
+                    }
+                    return $data;
+                case 'onlyLetters':
+                    if(!ctype_alpha($value)) {
+                        $data['valid'] = false;
+                        $data['errors'][$key] = 'Voer alleen letters in.';
+                    }
+                    return $data;
             }
         }
     }
