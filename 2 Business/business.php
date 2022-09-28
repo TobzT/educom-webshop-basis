@@ -24,9 +24,9 @@ function getData($page) {
     switch($page) {
         case 'register':
             
-            // if($_SERVER['REQUEST_METHOD'] == "POST") {
-            //     $data = validateRegistration(".\users\users.txt");
-            // }
+            if($_SERVER['REQUEST_METHOD'] == "POST") {
+                $data = validateRegistration(".\users\users.txt");
+            }
             return $data;
 
         case 'contact':
@@ -81,8 +81,10 @@ function validateForm($data) {
         $data['valid'] = true;
         // var_dump($data['meta']);
         // print_r($data['meta']);
+        var_dump($_POST);
         foreach($data['meta'] as $key => $metaArray) {
             // var_dump($metaArray);
+            
             $data['values'][$key] = test_inputs(getVarFromArray($_POST, $key));
             $data = validateField($data, $key, $metaArray);
         }
@@ -261,8 +263,8 @@ function showMetaForm($data, $text) {
 
     showFormStart();
     // var_dump($data);
-    foreach($data['meta'] as $meta){
-        $key = key($meta);
+    foreach(array_keys($data['meta']) as $key){
+        $meta = $data['meta'][$key];
         showMetaFormItem($key, $data, $meta);
     }
     showFormEnd($data['page'], $text);

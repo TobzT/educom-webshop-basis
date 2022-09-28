@@ -181,12 +181,12 @@ function showContactThanks($data) {
 }
 
 function ShowFormStart() {
-    echo('<form class="body" method="post" action="index.php"s>');
+    echo('<form action="index.php" method="post" class="body">');
 }
 
 function ShowFormEnd($page, $submitText) {
     echo('<input type="hidden" name="page" value="'.$page.'">');
-    echo('<button>'.$submitText.'</button></form>');
+    echo('<button type="submit">'.$submitText.'</button></form>');
 }
 
 function showPageError() {

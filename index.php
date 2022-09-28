@@ -23,11 +23,7 @@ function getRequestedPage() {
 }
 
 function processRequest($page){
-    switch($page){
-        case 'home':
-            //TODO
-        case 'about':
-            //TODO
+    switch($page) {
         case 'contact':
             $data = getData('contact');
             $data = validateForm($data);
