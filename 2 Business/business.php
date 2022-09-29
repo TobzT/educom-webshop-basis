@@ -16,6 +16,7 @@ function getOptions() {
 
 function getVarFromArray($array, $key, $default = NULL) {
     return isset($array[$key]) ? $array[$key] : $default;
+    
 }
 //DATA
 function getData($page) {
