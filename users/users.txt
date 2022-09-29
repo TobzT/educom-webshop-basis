@@ -30,3 +30,6 @@ amog@ussy.nl|t|1234
 amog@ussy2.nl|t|1234
 email@email.nl|name|1234
 admin@admin.nl|Tobias|admin123
+admin@test.nl|admin|adminadmin
+niks@niemand123.nl|admin|adminadmin
+testing@123.nl|testing|12341234
