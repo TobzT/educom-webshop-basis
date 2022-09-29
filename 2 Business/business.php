@@ -25,25 +25,27 @@ function getData($page) {
         case 'register':
             
             if($_SERVER['REQUEST_METHOD'] == "POST") {
-                $data = validateRegistration(".\users\users.txt");
+                $data = validateForm($data, ".\users\users.txt");
+                if($data['valid']) {
+                    // TODO
+                }
             }
             return $data;
 
         case 'contact':
             if($_SERVER['REQUEST_METHOD'] == "POST") {
-                $data = validateForm($data);
+                $data = validateForm($data, ".\users\users.txt");
             }
 
             return $data;
             
         case 'login':
-            // print_r($data['meta']);
-
-            // if($_SERVER['REQUEST_METHOD'] == "POST") {
-
-            //     $data = validateLogin(".\users\users.txt");
-                
-            // }
+            if($_SERVER['REQUEST_METHOD'] == "POST") {
+                $data = validateForm($data, ".\users\users.txt");
+                if($data['valid']) {
+                    // TODO
+                }
+            }
             return $data;
     }
 }
@@ -52,16 +54,16 @@ function getMetaData($page) {
     switch($page) {
         case 'login':
             return array(
-                'email' => array('label' => 'E-mail: ', 'type' => 'email', 'validations' => array('validEmail')),
-                'pw' => array('label' => 'Password: ', 'type' => 'password', 'validations' => array('validPassword'))
+                'email' => array('label' => 'E-mail: ', 'type' => 'email', 'validations' => array('validEmail', 'notEmpty')),
+                'pw' => array('label' => 'Password: ', 'type' => 'password', 'validations' => array('correctPassword', 'notEmpty'))
             );
     
         case 'register':
             return array(
-                'name' => array('label' => 'Name: ', 'type' => 'text', 'validations' => array('onlyLetters')),
-                'email' => array('label' => 'E-mail: ', 'type' => 'email', 'validations' => array('validEmail', 'notDuplicateMail')),
-                'pw' => array('label' => 'Password', 'type' => 'password', 'validations' => array('notEmpty', 'validPassword')),
-                'cpw' => array('label' => 'Confim Password', 'type' => 'password', 'validations' => array('equalField:pw'))
+                'name' => array('label' => 'Name: ', 'type' => 'text', 'validations' => array('onlyLetters', 'notEmpty')),
+                'email' => array('label' => 'E-mail: ', 'type' => 'email', 'validations' => array('validEmail', 'notDuplicateMail', 'notEmpty')),
+                'pw' => array('label' => 'Password', 'type' => 'password', 'validations' => array('validPassword', 'notEmpty')),
+                'cpw' => array('label' => 'Confim Password', 'type' => 'password', 'validations' => array('equalField:pw', 'notEmpty'))
             );
 
         case 'contact':
@@ -76,25 +78,21 @@ function getMetaData($page) {
     }
 }
 
-function validateForm($data) {
+function validateForm($data, $filename) {
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $data['valid'] = true;
-        // var_dump($data['meta']);
-        // print_r($data['meta']);
-        // var_dump($_POST);
+        $data['errors'] = NULL;
         foreach($data['meta'] as $key => $metaArray) {
-            // var_dump($metaArray);
             
             $data['values'][$key] = test_inputs(getVarFromArray($_POST, $key));
-            $data = validateField($data, $key, $metaArray);
+            $data = validateField($data, $key, $filename);
         }
     }
-    // var_dump($data['values']);
 
     return $data;
 }
 
-function validateField($data, $key, $metaArray) {
+function validateField($data, $key, $filename) {
     if(!empty($data['meta'][$key]['validations'])){
         $value = $data['values'][$key];
         foreach($data['meta'][$key]['validations'] as $validation) {
@@ -105,28 +103,66 @@ function validateField($data, $key, $metaArray) {
                         $fieldName = explode(':', $data['meta'][$key]['label'])[0];
                         $data['errors'][$key] = $fieldName .' mag niet leeg zijn.';
                     }
-                    return $data;
+                    break;
+                    
                 case 'validEmail':
                     
                     if(!str_contains($value, '@') Or !str_contains($value, '.')) {
                         $data['valid'] = false;
                         $data['errors'][$key] = 'Dit is geen E-mail adres.';
                     }
-                    return $data;
+                    break;
+                    
                 case 'onlyNumbers':
                     if(!is_numeric($value)) {
                         $data['valid'] = false;
                         $data['errors'][$key] = 'Voer alleen cijfers in.';
                     }
-                    return $data;
+                    
                 case 'onlyLetters':
                     if(!ctype_alpha($value)) {
                         $data['valid'] = false;
                         $data['errors'][$key] = 'Voer alleen letters in.';
                     }
-                    return $data;
+                    break;
+                case 'notDuplicateMail':
+                    if(findByEmailB($filename, strtolower($data['values'][$key]))) {
+                        $data['valid'] = false;
+                        $data['errors'][$key] = 'Dit e-mail adres is al bekend.';
+                    }
+                    break;
+                case 'validPassword':
+                    $len = strlen($data['values'][$key]);
+                    switch($len){
+                        case ($len < 8):
+                            $data['valid'] = false;
+                            $data['errors'][$key] = 'Wachtwoord mag niet minder dan acht tekens zijn.';
+                            break;
+                        case ($len > 40):
+                            $data['valid'] = false;
+                            $data['errors'][$key] = 'Wachtwoord mag niet meer dan veertig tekens zijn.';
+                            break;
+                    }
+                    break;
+                case 'correctPassword':
+                    $pwInDb = test_inputs(findByEmail($filename, strtolower(getVarFromArray($_POST, 'email')))['pw']);
+                    $pwInPost = test_inputs($data['values'][$key]);
+                    if($pwInDb !== $pwInPost ) {
+                        $data['valid'] = false;
+                        $data['errors'][$key] = 'Deze combinatie van e-mail en wachtwoord is niet bekend.';
+                    }
+                    break;
+                case str_starts_with($validation, 'equalField'):
+                    $fields = explode(':', $validation);
+                    if($data['values'][$key] !== $data['values'][$fields[1]]){
+                        $data['valid'] = false;
+                        $data['errors'][$key] = 'Twee velden komen niet overeen.';
+                    }
+                    break;
+                    
             }
         }
+        return $data;
     }
     
     return $data;
@@ -201,7 +237,7 @@ function validateLogin($filename) {
 
 function doLogIn($data) {
     
-    $_SESSION['username'] = $data['name'];
+    $_SESSION['username'] = findByEmail("./users/users.txt", $data['values']['email'])['name'];
     $_SESSION['loggedin'] = true;
 }
 

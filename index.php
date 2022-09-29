@@ -26,7 +26,7 @@ function processRequest($page){
     switch($page) {
         case 'contact':
             $data = getData('contact');
-            $data = validateForm($data);
+            $data = validateForm($data, "./users/users.txt");
             if($data['valid'] == true){
                 $page = 'thanks';
             }
