@@ -108,10 +108,6 @@ function showRegisterContent() {
     
 
     showMetaForm($data, "Sign up");
-    // showFormItem("name", "text", "Naam:", $data["name"], $data["nameErr"]);
-    // showFormItem("email", "email", "E-mail:", $data["email"], $data["emailErr"]);
-    // showFormItem("pw", "password", "Password:", $data["pw"], $data["pwErr"]);
-    // showFormItem("cpw", "password", "Confirm Password:", $data["cpw"], "");
     
 }
 
@@ -158,7 +154,7 @@ function showContactContent() {
         showContactThanks($data);
         
     } else {
-        // showGenericForm("contact", $data);
+        
         
         showMetaForm($data, "Submit");
     }

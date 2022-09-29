@@ -8,6 +8,8 @@ require_once("./2 Business/business.php");
 require_once("./3 Data/data.php");
 
 session_start();
+date_default_timezone_set('CET');
+session_check();
 // var_dump($_SESSION);
 $page = getRequestedPage();
 $data = processRequest($page);
@@ -23,6 +25,7 @@ function getRequestedPage() {
 }
 
 function processRequest($page){
+    session_check();
     switch($page) {
         case 'contact':
             $data = getData('contact');
@@ -48,6 +51,7 @@ function processRequest($page){
         case 'register':
             $data = getData('register');
             if($data['valid']) {
+                registerUser($data, "./users/users.txt");
                 $page = 'login';
             }
             break;

@@ -21,33 +21,10 @@ function getVarFromArray($array, $key, $default = NULL) {
 function getData($page) {
     $data = array('page' => $page, "valid" => NULL, 'errors' => array(), 'values' => array());
     $data['meta'] = getMetaData($page);
-    switch($page) {
-        case 'register':
-            
-            if($_SERVER['REQUEST_METHOD'] == "POST") {
-                $data = validateForm($data, ".\users\users.txt");
-                if($data['valid']) {
-                    // TODO
-                }
-            }
-            return $data;
-
-        case 'contact':
-            if($_SERVER['REQUEST_METHOD'] == "POST") {
+    if($_SERVER['REQUEST_METHOD'] == "POST") {
                 $data = validateForm($data, ".\users\users.txt");
             }
-
             return $data;
-            
-        case 'login':
-            if($_SERVER['REQUEST_METHOD'] == "POST") {
-                $data = validateForm($data, ".\users\users.txt");
-                if($data['valid']) {
-                    // TODO
-                }
-            }
-            return $data;
-    }
 }
 
 function getMetaData($page) {
@@ -118,6 +95,7 @@ function validateField($data, $key, $filename) {
                         $data['valid'] = false;
                         $data['errors'][$key] = 'Voer alleen cijfers in.';
                     }
+                    break;
                     
                 case 'onlyLetters':
                     if(!ctype_alpha($value)) {
@@ -168,132 +146,64 @@ function validateField($data, $key, $filename) {
     return $data;
 }
 
-function validateContactForm($data) {
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
-        
-        $data['valid'] = true;
-        $data['gender'] = test_inputs(getVarFromArray($_POST, "gender"));
-        
-        if(empty(test_inputs(getVarFromArray($_POST, "name")))) {
-            $data['nameErr'] = "Je moet je naam invullen.";
-            $data['valid'] = false;
-        } else {
-            $data['name'] = test_inputs(getVarFromArray($_POST, "name"));
-        }
-
-
-        if(empty(test_inputs(getVarFromArray($_POST, "email")))) {
-            $data['emailErr'] = "Je moet je e-mail adres invullen.";
-            $data['valid'] = false;
-        } else {
-            $data['email'] = test_inputs(getVarFromArray($_POST, "email"));
-        }
-
-        if(empty(test_inputs(getVarFromArray($_POST, "tlf")))) {
-            $data['tlfErr'] = "Je moet je telefoonnummer invullen.";
-            $data['valid'] = false;
-        } else {
-            $data['tlf'] = test_inputs(getVarFromArray($_POST, "tlf"));
-        }
-
-        if(empty(getVarFromArray($_POST, "pref"))) {
-            $data['prefErr'] = "Je moet een voorkeur kiezen.";
-            $data['valid'] = false;
-        } else {
-            $data['pref'] = test_inputs(getVarFromArray($_POST, "pref"));
-        }
-
-        $data['text'] = test_inputs(getVarFromArray($_POST, "Text1"));
-    }
-    return $data;
-}
 //LOGIN
-function validateLogin($filename) {
-    $emailErr = $pwErr = $name = "";
-    $valid = true;
-    $email = test_inputs(strtolower(getVarFromArray($_POST, 'email')));
-    $pw = test_inputs(getVarFromArray($_POST, 'pw'));
-    $data = findByEmail($filename, $email);
-    if(!empty($data)) {
-        if(!empty($data['name'])){
-            $name = $data['name'];
-        }
-    
-        if(empty($pw)) {
-            $valid = false;
-            $pwErr = 'Please enter a password.';
-        } elseif (test_inputs($data['pw']) !== $pw) {
-            $valid = false;
-            $pwErr = 'Password does not match';
-        }
-    } else {
-        $valid = false;
-        $emailErr = 'E-mail is not registered.';
-    }
-    
-    return array('valid' => $valid, 'email' => $email, 'emailErr' => $emailErr ,'pw' => $pw, 'pwErr' => $pwErr, 'name' => $name);
-
-}
 
 function doLogIn($data) {
     
     $_SESSION['username'] = findByEmail("./users/users.txt", $data['values']['email'])['name'];
     $_SESSION['loggedin'] = true;
+    $_SESSION['lastUsed'] = date('Y:m:t-H:m:s');
+    
 }
 
 function doLogOut() {
     $_SESSION['username'] = NULL;
     $_SESSION['loggedin'] = false;
+    $_SESSION['lastUsed'] = NULL;
 }
 
+function session_check() {
+    if ($_SESSION['lastUsed'] !== NULL){
+        $currentDate = explode("-", date('Y:m:t-H:m:s'));
+        $currentTime = $currentDate[1];
+        $currentDay = $currentDate[0];
+        $lastDate = explode("-", $_SESSION['lastUsed']);
+        $lastTime = $lastDate[1];
+        $lastDay = $lastDate[0];
+        if ($currentDay !== $lastDay) {
+            doLogout();
+            return;
+        } elseif(checkTimeout($currentTime, $lastTime)) {
+            doLogout();
+            return;
+        }
+    } else {
+        doLogout();
+        return;
+    }
+}
+
+function checkTimeout($currentTime, $lastTime) {
+    $currentTime = explode(":", $currentTime);
+    $lastTime = explode(":", $lastTime);
+    if(2 > (int)$currentTime[0] - (int)$lastTime[0]){
+        return false;
+    } elseif(30 > (int)$currentTime[1] - (int)$lastTime[1]) {
+        return false;
+    }
+
+    return true;
+}
 //REGISTER
 
-
-
-
-function validateRegistration($filename) {
-    $nameErr = $pwErr = $emailErr = NULL;
-    $valid = true;
-    $name = test_inputs(getVarFromArray($_POST, "name"));
-    $email = strtolower(test_inputs(getVarFromArray($_POST, "email")));
-    $pw = test_inputs(getVarFromArray($_POST, "pw"));
-    $cpw = test_inputs(getVarFromArray($_POST, "cpw"));
-
-    if(empty($name)) {
-        $valid = false;
-        $nameErr = "Please enter your name.";
-    }
-    
-    if (empty($pw)) {
-        $valid = false;
-        $pwErr = "Please enter your password.";
-    }
-
-    if (empty($email)) {
-        $valid = false;
-        $emailErr = "Please enter your e-mail.";
-    }
-
-    if ($pw !== $cpw){
-        $valid = false;
-        $pwErr = "Passwords do not match";
-    }
-
-    if (findByEmailB($filename, $email)) {
-        $valid = false;
-        $emailErr = "E-mail found in database";
-    }
-
-    
-    if ($valid) {
-        $message = $email . "|" . $name . "|" . $pw;
-        saveInDb($filename, $message);
-        
-    }
-    
-    return array("valid" => $valid, "name" => $name, "nameErr" => $nameErr, "pw" => $pw, "cpw" => $cpw, "pwErr" => $pwErr, "email" => $email, "emailErr" => $emailErr);
-
+function registerUser($data, $filename) {
+    $name = $data['values']['name'];
+    $email = $data['values']['email'];
+    $pw = $data['values']['pw'];
+    $message = $email . "|" . $name . "|" . $pw;
+    saveInDb($filename, $message);
 }
+
 
 
 
@@ -374,52 +284,6 @@ function showMetaFormItem($key, $data, $meta) {
                     <input class="input" type="'.$meta['type'].'" id="'.$key.'" name="'.$key.'" value="'. $data['values'][$key] .'">
                     
                     <h3 class="error">'.$data['errors'][$key] .'</h3>
-                
-            ');
-            break;
-    }
-    echo('</div><br>');
-}
-
-function showFormItem($key, $type, $labeltext, $value, $error, $options=NULL) {
-    
-    echo('<div>
-        <label for="'.$key.'">'.$labeltext.'</label>'
-    );
-    
-    switch ($type) {
-        case "dropdown":
-            echo('
-                    <select name="'.$key.'" id="'.$key.'" >');
-
-            echo(repeatingForm($data, $key));
-
-            echo('</select>');
-            break;
-        
-        case "radio":
-            echo('
-                <p><h3 class="error"> '. $error .'</h3></p>
-            ');
-
-            echo(repeatingRadio($data, $key));
-
-            break;
-        
-        case "textarea":
-            echo('
-                
-                <textarea class=input name="'.$key.'" cols="40" rows="10"></textarea>
-
-                
-            ');
-            break;
-        
-        default:
-            echo('
-                    <input class="input" type="'.$type.'" id="'.$key.'" name="'.$key.'" value="'. $value .'">
-                    
-                    <h3 class="error">'.$error.'</h3>
                 
             ');
             break;
