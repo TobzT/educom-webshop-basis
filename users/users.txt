@@ -29,3 +29,4 @@ sus@baka.nl|t|1234
 amog@ussy.nl|t|1234
 amog@ussy2.nl|t|1234
 email@email.nl|name|1234
+admin@admin.nl|Tobias|admin123
