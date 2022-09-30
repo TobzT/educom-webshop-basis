@@ -33,3 +33,4 @@ admin@admin.nl|Tobias|admin123
 admin@test.nl|admin|adminadmin
 niks@niemand123.nl|admin|adminadmin
 testing@123.nl|testing|12341234
+tobi@as.nl|T|12341234
